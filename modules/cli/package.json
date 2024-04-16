@@ -1,0 +1,14 @@
+{
+	"name": "@vault-of-ayes/cli",
+	"scripts": {
+		"build": "tsc --build",
+		"build:watch": "tsc --watch"
+	},
+	"bin": {
+		"voa": "dist/"
+	},
+	"devDependencies": {
+		"commander": "^12.0.0-1",
+		"@commander-js/extra-typings": "^12.0.0-1"
+	}
+}

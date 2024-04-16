@@ -1,0 +1,8 @@
+{
+	"editorconfig": true,
+	"parser": "typescript",
+	"singleQuote": false,
+	"arrowParens": "always",
+	"printWidth": 80,
+	"trailingComma": "none"
+}

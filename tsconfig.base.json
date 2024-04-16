@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": false,
+		"allowJs": false,
+		"checkJs": false,
+		"lib": [
+			"ESNext",
+			"DOM"
+		]
+	}
+}

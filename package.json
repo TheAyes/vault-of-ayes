@@ -1,0 +1,11 @@
+{
+	"name": "@vault-of-ayes/root",
+	"packageManager": "pnpm@9.0.0",
+	"author": "Justin 'Ayes' Schildt",
+	"repository": "",
+	"devDependencies": {
+		"prettier": "latest",
+		"typescript": "^5.4.5",
+		"@types/node": "^20.12.7"
+	}
+}
