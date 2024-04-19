@@ -3,9 +3,10 @@ import * as path from "path";
 import { cliConfig } from "../config.js";
 import { voaCreateDir } from "../utils/filesystemUtils.js";
 import { voaLog } from "../utils/loggingUtils.js";
+import { voaJoin } from "../utils/pathUtils.js";
+import { voaFindProjectRoot } from "../utils/templateUtils.js";
 import {
 	applyFileNameReplacementOperations,
-	findProjectRoot,
 	isFileOrDir,
 	processFile,
 	retrieveTemplateFiles,
@@ -16,17 +17,8 @@ const generateTemplateFiles = async (templatePath: string) => {
 	const options = program.opts();
 	voaLog(`Received Options: ${JSON.stringify(options, null, 4)}`);
 
-	const rootPath = await findProjectRoot();
-	voaLog(`Found Root at: ${rootPath}`, {
-		logLevel: "log",
-		verboseOnly: true
-	});
-
-	const templatesPath = path.join(rootPath, "./templates", templatePath);
-	voaLog(`Looking for templates in: ${templatesPath}`, {
-		logLevel: "log",
-		verboseOnly: true
-	});
+	const rootPath = await voaFindProjectRoot();
+	const templatesPath = voaJoin(rootPath, "./templates", templatePath);
 
 	const templateFiles = await retrieveTemplateFiles(templatesPath);
 	voaLog(`Found templates: ${stringifyBeautifully(templateFiles)}`, {
@@ -90,6 +82,6 @@ program
 		"<project-path>",
 		"The name of your new project. This is also names the folder."
 	)
-	.action(() => generateTemplateFiles("project"));
+	.action(async () => generateTemplateFiles("project"));
 
-program.parse();
+await program.parseAsync();

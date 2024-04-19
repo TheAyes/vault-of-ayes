@@ -19,7 +19,7 @@ export type VoaLogOptions = {
 export type VoaLogFunction = (message: string, options?: VoaLogOptions) => void;
 
 // Fs
-export type VoaFilesystemOptions = { dry: boolean };
+export type VoaFilesystemOptions = { dry?: boolean };
 export type VoaWriteFileOptions = VoaFilesystemOptions;
 export type VoaCreateDirOptions = VoaFilesystemOptions;
 export type VoaReadDirFunction = (dir: PathLike) => Promise<string[]>;

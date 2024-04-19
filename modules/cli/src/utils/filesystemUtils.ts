@@ -11,16 +11,14 @@ import { voaLog } from "./loggingUtils.js";
 export const voaWriteFile = async (
 	file: PathLike,
 	content: string,
-	options: VoaWriteFileOptions = {
-		dry: false
-	}
+	{ dry = false }: VoaWriteFileOptions = {}
 ) => {
 	voaLog(
-		`Write File received properties:\n  file: ${file}\n  content: ${content}\n  dry: ${options.dry}`
+		`Write File received properties:\n  file: ${file}\n  content: ${content}\n  dry: ${dry}`
 	);
 
 	voaLog(`Trying to write file: ${file}`);
-	if (!options.dry) await writeFile(file, content, "utf-8");
+	if (!dry) await writeFile(file, content, "utf-8");
 };
 
 export const voaReadFile = async (file: PathLike): Promise<string> => {
@@ -41,6 +39,8 @@ export const voaCreateDir = async (
 export const voaReadDir: VoaReadDirFunction = async (dir) => {
 	return readdir(dir, {
 		encoding: UTF8_ENCODING,
-		recursive: true
+		recursive: false
 	});
 };
+
+export const voaExists = (pathUrl: PathLike) => {};

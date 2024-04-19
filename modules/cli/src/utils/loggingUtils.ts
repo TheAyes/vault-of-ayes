@@ -11,19 +11,18 @@ export const logLevels = [
 	"none"
 ] as const;
 
-export const shouldLog = (options: VoaLogOptions): boolean => {
-	options.logLevel = options.logLevel ?? "log";
-	options.verboseOnly = options.verboseOnly ?? false;
-
+export const shouldLog = ({
+	logLevel = "log",
+	verboseOnly = false
+}: VoaLogOptions = {}): boolean => {
 	// Exit early if global log level is set to "none"
 	if (cliConfig.logLevel === "none") return false;
 
 	// Introduce variable for index comparison to make the logic understandable
 	const logLevelComparison =
-		logLevels.indexOf(options.logLevel) >=
-		logLevels.indexOf(cliConfig.logLevel);
+		logLevels.indexOf(logLevel) <= logLevels.indexOf(cliConfig.logLevel);
 
-	return logLevelComparison && !(options.verboseOnly && !cliConfig.verbose);
+	return logLevelComparison && !(verboseOnly && !cliConfig.verbose);
 };
 
 export const voaLog: VoaLogFunction = (

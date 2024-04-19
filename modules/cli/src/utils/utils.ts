@@ -16,31 +16,6 @@ export const stringifyBeautifully = (value: any) =>
 export const getOptions = () => {
 	return program.opts();
 };
-export const findProjectRoot = async (
-	startDir: string = "."
-): Promise<string> => {
-	const maxDepth: number = 5;
-	let iterations = 0;
-
-	const recursiveSearch = async (currentDir: string): Promise<string> => {
-		try {
-			const packageJsonPath = path.join(currentDir, "package.json");
-			await access(packageJsonPath);
-			return currentDir;
-		} catch {
-			if (iterations > maxDepth) {
-				return "";
-			} else {
-				iterations++;
-
-				const parentDir = path.join(currentDir, "..");
-				return recursiveSearch(parentDir);
-			}
-		}
-	};
-
-	return await recursiveSearch(startDir);
-};
 
 export const retrieveTemplateFiles = async (directoryPath: string) => {
 	prettyLog(directoryPath);

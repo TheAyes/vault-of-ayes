@@ -9,8 +9,8 @@ export const UTF8_ENCODING: BufferEncoding = "utf-8" as const;
 export const INDENT_SIZE: number = 4 as const;
 
 export const cliConfig: CLIConfig = {
-	logLevel: "debug" as const,
-	verbose: true as const,
+	logLevel: "debug",
+	verbose: true,
 	templateFileContentReplaceOperations: [
 		makeContentReplaceOperation("name", process.argv[2]),
 		makeContentReplaceOperation("date", new Date().toDateString()),
