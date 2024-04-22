@@ -1,5 +1,4 @@
-import { program } from "@commander-js/extra-typings";
-import { access, lstat } from "node:fs/promises";
+import { lstat } from "node:fs/promises";
 import path from "path";
 import { cliConfig, INDENT_SIZE, TEMPLATE_EXTENSION } from "../config.js";
 import { TemplateReplaceOperation } from "../types.js";
@@ -12,10 +11,6 @@ export const prettyLog = (string: string) => {
 
 export const stringifyBeautifully = (value: any) =>
 	JSON.stringify(value, null, INDENT_SIZE);
-
-export const getOptions = () => {
-	return program.opts();
-};
 
 export const retrieveTemplateFiles = async (directoryPath: string) => {
 	prettyLog(directoryPath);
