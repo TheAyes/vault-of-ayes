@@ -9,6 +9,12 @@ vi.mock("../config.js");
 beforeEach(() => {
 	cliConfig.logLevel = "info";
 	cliConfig.verbose = false;
+
+	vi.spyOn(console, "log");
+});
+
+afterEach(() => {
+	vi.restoreAllMocks();
 });
 
 describe("shouldLog function tests", () => {
@@ -50,7 +56,6 @@ describe("voaLog function tests", () => {
 	});
 
 	test("'voaLog' should correctly log the message with appropriate log level and content", () => {
-		vi.spyOn(console, "log");
 		voaLog("Test Message", { logLevel: "log", verboseOnly: false });
 		expect(console.log).toHaveBeenCalled();
 		expect(console.log).lastCalledWith(

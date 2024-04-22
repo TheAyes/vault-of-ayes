@@ -1,6 +1,6 @@
 import { cliConfig } from "../config.js";
 import { VoaLogFunction, VoaLogOptions } from "../types.js";
-import { colorSyntax } from "./syntaxLogginUtils.js";
+import { colorSyntax } from "./syntaxLoggingUtils.js";
 
 export const logLevels = [
 	"debug",

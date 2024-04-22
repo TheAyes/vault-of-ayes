@@ -6,8 +6,6 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import { VoaWriteFileOptions } from "../types.js";
 import { voaReadFile, voaWriteFile } from "./filesystemUtils.js";
 
-// TODO *1: Extend this using true in memory file systems, then validate that the content has been written/read to/from the correct file and can be used accordingly.
-
 // Mock writeFile function
 vi.mock("fs/promises", () => ({
 	writeFile: vi.fn(),
@@ -27,7 +25,7 @@ describe("`voaWriteFile` function tests", () => {
 			dry: false
 		};
 
-		// TODO *1
+		// TODO *1: Extend this using true in memory file systems, then validate that the content has been written/read to/from the correct file and can be used accordingly.
 		await voaWriteFile(file, content, options);
 
 		expect(writeFile).toBeCalledWith(file, content, "utf-8");
