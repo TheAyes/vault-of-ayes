@@ -1,20 +1,12 @@
-import { lstat } from "node:fs/promises";
+/*
 import path from "path";
-import { cliConfig, INDENT_SIZE, TEMPLATE_EXTENSION } from "../config.js";
+import { cliConfig, TEMPLATE_EXTENSION } from "../config.js";
 import { TemplateReplaceOperation } from "../types.js";
-import { voaReadDir, voaReadFile, voaWriteFile } from "./filesystemUtils.js";
+import { voaReadFile, voaWriteFile } from "./filesystemUtils.js";
 import { voaLog } from "./loggingUtils.js";
 
 export const prettyLog = (string: string) => {
 	console.log(string);
-};
-
-export const stringifyBeautifully = (value: any) =>
-	JSON.stringify(value, null, INDENT_SIZE);
-
-export const retrieveTemplateFiles = async (directoryPath: string) => {
-	prettyLog(directoryPath);
-	return await voaReadDir(directoryPath);
 };
 
 export const applyFileNameReplacementOperations = async (
@@ -48,14 +40,6 @@ export const applyContentReplacementOperations = async (
 	return content;
 };
 
-export const isFileOrDir = async (filePath: string) => {
-	const templateLStat = await lstat(filePath);
-	const isFile = templateLStat.isFile();
-	const isDir = templateLStat.isDirectory();
-
-	return { isFile, isDir };
-};
-
 export const removeTemplateExtension = async (file: string) =>
 	file.replaceAll(TEMPLATE_EXTENSION, "");
 
@@ -83,20 +67,4 @@ export const processFile = async (
 
 	await voaWriteFile(targetFilePath, processedFileContent);
 };
-
-const getContentReplacePattern = (searchValue: string) =>
-	new RegExp(`\\$(?:\\{${searchValue}\}|${searchValue})`, "g");
-const getPathNameReplacePattern = (searchValue: string) =>
-	new RegExp(`_{2}${searchValue}_{2}`, "g");
-
-export const makeContentReplaceOperation =
-	(searchString: string, value: string): TemplateReplaceOperation =>
-	(previousValue: string) =>
-		previousValue.replaceAll(getContentReplacePattern(searchString), value);
-
-export const makePathReplaceOperation =
-	(searchString: string, value: string) => (previousValue: string) =>
-		previousValue.replaceAll(
-			getPathNameReplacePattern(searchString),
-			value
-		);
+*/

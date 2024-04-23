@@ -42,5 +42,3 @@ export const voaReadDir: VoaReadDirFunction = async (dir) => {
 		recursive: false
 	});
 };
-
-export const voaExists = (pathUrl: PathLike) => {};

@@ -1,3 +1,4 @@
+/*
 import { program } from "@commander-js/extra-typings";
 import * as path from "path";
 import { cliConfig } from "../config.js";
@@ -85,3 +86,4 @@ program
 	.action(async () => generateTemplateFiles("project"));
 
 await program.parseAsync();
+*/
