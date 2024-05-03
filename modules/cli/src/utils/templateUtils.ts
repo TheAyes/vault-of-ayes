@@ -1,7 +1,6 @@
-import { access } from "node:fs/promises";
-import path from "path";
-import { voaReadDir } from "./filesystemUtils.js";
+import { voaAccess, voaReadDir } from "./filesystemUtils.js";
 import { voaLog } from "./loggingUtils.js";
+import { voaJoin } from "./pathUtils.js";
 
 export const voaRetrieveTemplateFiles = async (directoryPath: string) => {
 	voaLog(`Trying to retrieve templates from ${directoryPath}`, {
@@ -17,8 +16,8 @@ export const voaFindProjectRoot = async (
 
 	const recursiveSearch = async (currentDir: string): Promise<string> => {
 		try {
-			const packageJsonPath = path.join(currentDir, "package.json");
-			await access(packageJsonPath);
+			const packageJsonPath = voaJoin(currentDir, "package.json");
+			await voaAccess(packageJsonPath);
 			return currentDir;
 		} catch {
 			if (iterations > maxDepth) {
@@ -26,7 +25,7 @@ export const voaFindProjectRoot = async (
 			} else {
 				iterations++;
 
-				const parentDir = path.join(currentDir, "..");
+				const parentDir = voaJoin(currentDir, "..");
 				return recursiveSearch(parentDir);
 			}
 		}

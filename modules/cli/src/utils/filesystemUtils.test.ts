@@ -1,95 +1,123 @@
-// Import required modules
-import { PathLike } from "node:fs";
-import { lstat, readFile, writeFile } from "node:fs/promises";
-import path from "path";
-import { afterEach, describe, expect, test, vi } from "vitest";
-import { VoaWriteFileOptions } from "../types.js";
-import { voaReadFile, voaWriteFile } from "./filesystemUtils.js";
-import { voaIsFileOrDir, voaNormalize } from "./pathUtils.js";
+import {type fs, vol} from "memfs";
+import {afterEach, describe, expect, test, vi} from "vitest";
+import {type VoaPathLike, type VoaWriteFileOptions} from "../types.js";
+import {voaReadFile, voaWriteFile} from "./filesystemUtils.js";
+import {voaIsFileOrDir} from "./pathUtils.js";
 
-// Mock writeFile function
+
 vi.mock("node:fs/promises", async () => {
-	const originalFs = await vi.importActual("node:fs/promises");
+	const memfs: { fs: typeof fs } = await vi.importActual("memfs");
 
-	return {
-		// TODO: *1 Extend this using true in memory file systems, then validate that the content has been written/read to/from the correct file and can be used accordingly.
-		writeFile: vi.fn(),
-		readFile: vi.fn(),
-		lstat: originalFs.lstat
-	};
+	return memfs.fs.promises;
 });
 
 afterEach(() => {
+	vol.reset();
 	vi.restoreAllMocks();
 });
 
-// Test description
 describe("`voaWriteFile` function tests", () => {
+	test("Given file path and content, when voaWriteFile is invoked, then it creates a file", async () => {
+		const file: VoaPathLike = "file.txt";
+		const content: string = "Test content";
+
+		await voaWriteFile(file, content);
+
+
+		expect(
+			(async () => await vol.promises.access(file))()
+		).resolves;
+
+		await expect(
+			(async () => await vol.promises.readFile(file, "utf-8"))()
+		).resolves.toBe(content);
+	});
+
 	test("Given file path, content and options, when not dry run, then writeFile runs with provided parameters", async () => {
-		const file: PathLike = "/path/to/file.txt";
+		const file: VoaPathLike = "path/to/file.txt";
 		const content: string = "Test content";
 		const options: VoaWriteFileOptions = {
 			dry: false
 		};
 
-		// TODO: *1
 		await voaWriteFile(file, content, options);
 
-		expect(writeFile).toBeCalledWith(file, content, "utf-8");
+		expect(
+			(async () => await vol.promises.access(file))()
+		).resolves;
+
+		await expect(
+			(async () => await vol.promises.readFile(file, "utf-8"))()
+		).resolves.toBe(content);
 	});
 
 	test("Given file path, content and options, when dry run, then writeFile does not run", async () => {
-		const file: PathLike = "/path/to/file.txt";
+		const file: VoaPathLike = "path/to/file.txt";
 		const content = "Test content";
 		const options: VoaWriteFileOptions = {
 			dry: true
 		};
 
-		// TODO *1
 		await voaWriteFile(file, content, options);
 
-		expect(writeFile).not.toBeCalled();
+		await expect(
+			(async () => await vol.promises.access(file))()
+		).rejects.toThrowError();
+
+		await expect(
+			(async () => await vol.promises.readFile(file, "utf-8"))()
+		).rejects.toThrowError();
 	});
 });
 
 describe("`voaReadFile` function tests", () => {
-	test("Given a file path and options, when executed, then readFile runs with provided parameters", async () => {
-		const file: PathLike = "/path/to/file.txt";
+	test("Given a file path and no options, when invoked, then readFile returns the content of the file", async () => {
+		const file: VoaPathLike = "path/to/file.txt";
+		const content: string = "Test content";
 
-		// TODO *1
-		await voaReadFile(file);
+		vol.fromJSON({[file]: content});
 
-		expect(readFile).toBeCalledWith(file, "utf-8");
+		await expect(
+			(async () => await voaReadFile(file))()
+		).resolves.toBe(content);
+	});
+
+	test("Given a file path that does not exist, when invoked, it throws an error", async () => {
+		const file: VoaPathLike = "path/to/non-existent-file.txt";
+
+		await expect(
+			voaReadFile(file)
+		).rejects.toThrowError();
 	});
 });
 
 describe("`voaIsFileOrDir` function tests", () => {
 	test("Given a file path, when checked, then returns that it is a file not a directory", async () => {
 		const filePath = "./modules/cli/package.json";
-		const result = await voaIsFileOrDir(filePath);
-		expect(result).toStrictEqual({ isDir: false, isFile: true });
+		const content = "Test content";
+		vol.fromJSON({[filePath]: content});
+
+		expect(
+			(async () => await voaIsFileOrDir(filePath))()
+		).resolves.toStrictEqual({isDir: false, isFile: true});
 	});
 
 	test("Given a directory path, when checked, then returns that it is a directory not a file", async () => {
 		const filePath = "./modules/cli/src";
-		const result = await voaIsFileOrDir(filePath);
-		expect(result).toStrictEqual({ isDir: true, isFile: false });
+		const content = "Test content";
+		vol.fromJSON({[filePath + "/test.txt"]: content});
+
+		expect(
+			(async () => await voaIsFileOrDir(filePath))()
+		).resolves.toStrictEqual({isDir: true, isFile: false});
 	});
 
 	test("Given a path that does not exist, when checked, then throws an error", async () => {
-		const spy = vi.spyOn({ lstat }, "lstat");
-		spy.mockImplementation(() =>
-			Promise.reject(new Error("ENOENT, no such file or directory"))
-		);
-		const filePath = voaNormalize("path/to/non/existent");
+		const filePath = "./modules/cli/src";
+		vol.fromJSON({});
 
-		try {
-			await voaIsFileOrDir(filePath);
-		} catch (error: any) {
-			expect(error).toBeTruthy();
-			expect(error?.message).toBe(
-				`ENOENT: no such file or directory, lstat '${voaNormalize(path.resolve(filePath))}'`
-			);
-		}
+		expect(
+			(async () => await voaIsFileOrDir(filePath))()
+		).rejects.toThrowError();
 	});
 });

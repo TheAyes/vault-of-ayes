@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vitest";
-import { voaJoin, voaNormalize } from "./pathUtils.js";
+import {describe, expect, test} from "vitest";
+import {voaJoin, voaNormalize} from "./pathUtils.js";
 
 const isWindows = process.platform === "win32";
 

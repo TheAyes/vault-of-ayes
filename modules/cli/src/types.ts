@@ -1,4 +1,4 @@
-import { PathLike } from "node:fs";
+import { ObjectEncodingOptions, PathLike } from "node:fs";
 import { logLevels } from "./utils/loggingUtils.js";
 
 export type LogLevel = (typeof logLevels)[number];
@@ -22,4 +22,7 @@ export type VoaLogFunction = (message: string, options?: VoaLogOptions) => void;
 export type VoaFilesystemOptions = { dry?: boolean };
 export type VoaWriteFileOptions = VoaFilesystemOptions;
 export type VoaCreateDirOptions = VoaFilesystemOptions;
-export type VoaReadDirFunction = (dir: PathLike) => Promise<string[]>;
+export type VoaReadDirFunction = (dir: VoaPathLike) => Promise<string[]>;
+
+export type VoaPathLike = PathLike;
+export type VoaObjectEncodingOptions = ObjectEncodingOptions;

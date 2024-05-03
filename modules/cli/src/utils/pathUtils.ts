@@ -1,6 +1,6 @@
-import { PathLike } from "node:fs";
-import { lstat } from "node:fs/promises";
 import path from "path";
+import { VoaPathLike } from "../types.js";
+import { voaLStat } from "./filesystemUtils.js";
 import { voaLog } from "./loggingUtils.js";
 
 export const voaNormalize = (pathUrl: string) => {
@@ -27,11 +27,27 @@ export const voaJoin = (...paths: string[]) => {
 };
 
 export const voaIsFileOrDir = async (filePath: string) => {
-	const templateLStat = await lstat(filePath);
+	const templateLStat = await voaLStat(filePath);
 	const isFile = templateLStat.isFile();
 	const isDir = templateLStat.isDirectory();
 
 	return { isFile, isDir };
 };
 
-export const voaExists = (pathUrl: PathLike) => {};
+// TODO: Implement this
+export const voaExists = (pathUrl: VoaPathLike) => {};
+
+export const voaDirname = (pathUrl: string) => path.dirname(pathUrl);
+
+export const voaResolve = (...paths: string[]) => path.resolve(...paths);
+export const voaPath = {
+	...path,
+	normalize: voaNormalize,
+	join: voaJoin,
+	isFileOrDir: voaIsFileOrDir,
+	exists: voaExists,
+	resolve: voaResolve,
+	dirname: voaDirname
+};
+
+export default voaPath;

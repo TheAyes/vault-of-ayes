@@ -1,15 +1,23 @@
-import { PathLike } from "node:fs";
-import { readdir, readFile, writeFile } from "node:fs/promises";
+import {
+	access,
+	lstat,
+	mkdir,
+	readdir,
+	readFile,
+	writeFile
+} from "node:fs/promises";
+import * as path from "path";
 import { UTF8_ENCODING } from "../config.js";
 import {
 	VoaCreateDirOptions,
+	VoaPathLike,
 	VoaReadDirFunction,
 	VoaWriteFileOptions
 } from "../types.js";
 import { voaLog } from "./loggingUtils.js";
 
 export const voaWriteFile = async (
-	file: PathLike,
+	file: VoaPathLike,
 	content: string,
 	{ dry = false }: VoaWriteFileOptions = {}
 ) => {
@@ -18,15 +26,23 @@ export const voaWriteFile = async (
 	);
 
 	voaLog(`Trying to write file: ${file}`);
-	if (!dry) await writeFile(file, content, "utf-8");
+	if (!dry) {
+		const dirName = path.dirname(file.toString());
+		await mkdir(dirName, { recursive: true });
+
+		await writeFile(file, content, { encoding: "utf-8" });
+	}
 };
 
-export const voaReadFile = async (file: PathLike): Promise<string> => {
-	return await readFile(file, "utf-8");
+export const voaReadFile = async (file: VoaPathLike): Promise<string> => {
+	return await readFile(file, { encoding: "utf-8" });
 };
+
+export const voaAccess = async (path: VoaPathLike, mode?: number) =>
+	access(path, mode);
 
 export const voaCreateDir = async (
-	dir: PathLike,
+	dir: VoaPathLike,
 	options: VoaCreateDirOptions = {
 		dry: false
 	}
@@ -42,3 +58,5 @@ export const voaReadDir: VoaReadDirFunction = async (dir) => {
 		recursive: false
 	});
 };
+
+export const voaLStat = (pathUrl: VoaPathLike) => lstat(pathUrl);
