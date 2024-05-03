@@ -1,6 +1,6 @@
 import path from "path";
 import { VoaPathLike } from "../types.js";
-import { voaLStat } from "./filesystemUtils.js";
+import { voaAccess, voaLStat } from "./filesystemUtils.js";
 import { voaLog } from "./loggingUtils.js";
 
 export const voaNormalize = (pathUrl: string) => {
@@ -33,9 +33,15 @@ export const voaIsFileOrDir = async (filePath: string) => {
 
 	return { isFile, isDir };
 };
-
-// TODO: Implement this
-export const voaExists = (pathUrl: VoaPathLike) => {};
+export const voaExists = async (pathUrl: VoaPathLike) => {
+	try {
+		const normalizedPath = voaNormalize(pathUrl.toString());
+		await voaAccess(normalizedPath);
+		return true;
+	} catch {
+		return false;
+	}
+};
 
 export const voaDirname = (pathUrl: string) => path.dirname(pathUrl);
 

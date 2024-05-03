@@ -91,33 +91,4 @@ describe("`voaReadFile` function tests", () => {
 	});
 });
 
-describe("`voaIsFileOrDir` function tests", () => {
-	test("Given a file path, when checked, then returns that it is a file not a directory", async () => {
-		const filePath = "./modules/cli/package.json";
-		const content = "Test content";
-		vol.fromJSON({[filePath]: content});
 
-		expect(
-			(async () => await voaIsFileOrDir(filePath))()
-		).resolves.toStrictEqual({isDir: false, isFile: true});
-	});
-
-	test("Given a directory path, when checked, then returns that it is a directory not a file", async () => {
-		const filePath = "./modules/cli/src";
-		const content = "Test content";
-		vol.fromJSON({[filePath + "/test.txt"]: content});
-
-		expect(
-			(async () => await voaIsFileOrDir(filePath))()
-		).resolves.toStrictEqual({isDir: true, isFile: false});
-	});
-
-	test("Given a path that does not exist, when checked, then throws an error", async () => {
-		const filePath = "./modules/cli/src";
-		vol.fromJSON({});
-
-		expect(
-			(async () => await voaIsFileOrDir(filePath))()
-		).rejects.toThrowError();
-	});
-});
