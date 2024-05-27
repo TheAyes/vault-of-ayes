@@ -1,6 +1,11 @@
 import { Command } from "@commander-js/extra-typings";
-import { voaNormalize } from "../utils/pathUtils.js";
-import { voaFindProjectRoot } from "../utils/templateUtils.js";
+import { vol } from "memfs";
+import {
+	voaFindProjectRoot,
+	voaJoin,
+	voaNormalize
+} from "../utils/pathUtils.js";
+import { voaRetrieveTemplateFiles } from "../utils/templateUtils.js";
 
 export const makeProjectCommand = () => {
 	const projects = new Command("projects").option("--dry");
@@ -15,6 +20,18 @@ export const makeProjectCommand = () => {
 			const projectOptions = projects.opts();
 			projectPath = voaNormalize(projectPath);
 			const rootPath = await voaFindProjectRoot();
+
+			const templateFiles = await voaRetrieveTemplateFiles(
+				voaJoin(rootPath, "templates/project")
+			);
+
+			vol.fromJSON({}, rootPath);
+
+			console.log(templateFiles);
+
+			templateFiles.forEach((currentFile, index) => {
+				//vol.mk;
+			});
 		});
 
 	projects

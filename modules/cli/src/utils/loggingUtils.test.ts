@@ -32,25 +32,35 @@ describe("shouldLog function tests", () => {
 		expect(resultVerboseFalse).toBe(false);
 	});
 
-	test("Given a custom log level, when shouldLog is called, then it should correctly compare the custom and global log levels", () => {
-		const options: VoaLogOptions = {
-			logLevel: "warn"
-		};
-		cliConfig.logLevel = "info";
-		const resultLower = shouldLog(options);
-		expect(resultLower).toBe(false);
+	describe("Given a custom log level, when shouldLog is called, then it should correctly compare the custom and global log levels", () => {
+		beforeEach(() => {
+			cliConfig.logLevel = "warn";
+		})
 
-		cliConfig.logLevel = "warn";
-		const resultEqual = shouldLog(options);
-		expect(resultEqual).toBe(true);
 
-		cliConfig.logLevel = "error";
-		const resultHigher = shouldLog(options);
-		expect(resultHigher).toBe(true);
+		test(`should not log if log level is below current log level`, () => {
+			const options: VoaLogOptions = { logLevel: "info"};
+			expect(shouldLog(options)).toBe(false);
+		});
+
+		test("should log if log level is equal current log level", () => {
+			const options: VoaLogOptions = { logLevel: "warn"};
+			expect(shouldLog(options)).toBe(true);
+		});
+
+		test("should log if log level is above current log level", () => {
+			const options: VoaLogOptions = { logLevel: "error"};
+			expect(shouldLog(options)).toBe(true);
+		});
+
 	});
 });
 
 describe("voaLog function tests", () => {
+	beforeEach(() => {
+		cliConfig.logLevel = "debug";
+	})
+
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});

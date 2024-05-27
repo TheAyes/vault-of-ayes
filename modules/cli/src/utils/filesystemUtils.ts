@@ -6,7 +6,6 @@ import {
 	readFile,
 	writeFile
 } from "node:fs/promises";
-import * as path from "path";
 import { UTF8_ENCODING } from "../config.js";
 import {
 	VoaCreateDirOptions,
@@ -15,6 +14,7 @@ import {
 	VoaWriteFileOptions
 } from "../types.js";
 import { voaLog } from "./loggingUtils.js";
+import path from "./pathUtils.js";
 
 export const voaWriteFile = async (
 	file: VoaPathLike,
@@ -53,9 +53,9 @@ export const voaCreateDir = async (
 };
 
 export const voaReadDir: VoaReadDirFunction = async (dir) => {
-	return readdir(dir, {
+	return await readdir(dir, {
 		encoding: UTF8_ENCODING,
-		recursive: false
+		recursive: true
 	});
 };
 

@@ -7,7 +7,7 @@
 		"test": "vitest run --coverage --silent",
 		"test:watch": "vitest --coverage --silent",
 		"dev": "pnpm run \"/.*:watch$/\"",
-		"exp": "esrun ./scripts/experiments.ts"
+		"exp": "npx tsx ./scripts/experiments.ts"
 	},
 	"bin": {
 		"voa": "dist/src/program.js"

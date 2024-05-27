@@ -20,7 +20,7 @@ export const shouldLog = ({
 
 	// Introduce variable for index comparison to make the logic understandable
 	const logLevelComparison =
-		logLevels.indexOf(logLevel) <= logLevels.indexOf(cliConfig.logLevel);
+		logLevels.indexOf(logLevel) >= logLevels.indexOf(cliConfig.logLevel);
 
 	return logLevelComparison && !(verboseOnly && !cliConfig.verbose);
 };
@@ -30,7 +30,10 @@ export const voaLog: VoaLogFunction = (
 	{ logLevel = "log", verboseOnly = false }: VoaLogOptions = {}
 ) => {
 	if (!shouldLog({ logLevel, verboseOnly }) || logLevel === "none") return;
-	const logLevelPrefix = `[ ${logLevel.padEnd(5)} - ${new Date().toLocaleTimeString()} ] `;
+	const logLevelPrefix = `[ ${logLevel.padEnd(5)} - ${new Date().toLocaleTimeString()} ]`;
+
+	message = JSON.stringify(message, null, 4);
+
 	message = `${logLevelPrefix} ${message}`;
 	const coloredMessage = colorSyntax(message);
 

@@ -16,7 +16,7 @@ export type VoaLogOptions = {
 	logLevel?: LogLevel;
 	verboseOnly?: boolean;
 };
-export type VoaLogFunction = (message: string, options?: VoaLogOptions) => void;
+export type VoaLogFunction = (message: any, options?: VoaLogOptions) => void;
 
 // Fs
 export type VoaFilesystemOptions = { dry?: boolean };
