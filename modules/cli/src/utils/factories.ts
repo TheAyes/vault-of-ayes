@@ -1,4 +1,4 @@
-import { TemplateReplaceOperation } from "../types.js";
+import { TemplateReplaceOperation } from "../types";
 
 const voaGetContentReplacePattern = (searchValue: string) =>
 	new RegExp(`\\$(?:\\{${searchValue}\}|${searchValue})`, "g");

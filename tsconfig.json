@@ -2,8 +2,8 @@
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
 		"paths": {
-			"@vault-of-ayes/*": [
-				"./modules/*"
+			"@vault-of-ayes*/": [
+				"./modules"
 			]
 		}
 	},

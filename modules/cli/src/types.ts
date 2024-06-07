@@ -1,11 +1,11 @@
 import { ObjectEncodingOptions, PathLike } from "node:fs";
-import { logLevels } from "./utils/loggingUtils.js";
+import { logLevels } from "./utils/consoleUtils";
 
 export type LogLevel = (typeof logLevels)[number];
 export type TemplateReplaceOperation = (previousValue: string) => string;
 
 export type CLIConfig = {
-	logLevel: LogLevel;
+	logLevel: LogLevel["id"];
 	verbose: boolean;
 	templateFileContentReplaceOperations: TemplateReplaceOperation[];
 	templateDirNameReplaceOperations: TemplateReplaceOperation[];
@@ -13,7 +13,7 @@ export type CLIConfig = {
 
 // Log
 export type VoaLogOptions = {
-	logLevel?: LogLevel;
+	logLevel?: LogLevel["id"];
 	verboseOnly?: boolean;
 };
 export type VoaLogFunction = (message: any, options?: VoaLogOptions) => void;

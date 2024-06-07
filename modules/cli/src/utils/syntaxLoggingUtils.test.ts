@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { colorSyntax } from "./syntaxLoggingUtils.js";
+import { colorSyntax } from "./syntaxLoggingUtils";
 
 describe("`colorSyntax` function tests", () => {
 	test("Given a message with specific syntax patterns, WHEN colorSyntax function is called, THEN it should return the message with the syntaxes properly colored", () => {

@@ -1,6 +1,6 @@
 // Importing necessary modules and functions
 import { describe, expect, test } from "vitest";
-import { voaParseJson, voaStringify } from "./jsonUtils.js";
+import { voaParseJson, voaStringify } from "./jsonUtils";
 
 // The voaStringify function convert any JavaScript value to a JSON string
 describe("`voaStringify` function tests", () => {

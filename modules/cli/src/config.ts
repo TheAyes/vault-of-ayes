@@ -1,8 +1,8 @@
-import { CLIConfig } from "./types.js";
+import { CLIConfig } from "./types";
 import {
 	voaMakeContentReplaceOperation,
 	voaMakePathReplaceOperation
-} from "./utils/factories.js";
+} from "./utils/factories";
 
 export const TEMPLATE_EXTENSION = ".template" as const;
 export const UTF8_ENCODING: BufferEncoding = "utf-8" as const;
@@ -10,7 +10,7 @@ export const INDENT_SIZE: number = 4 as const;
 
 export const cliConfig: CLIConfig = {
 	logLevel: "debug",
-	verbose: true,
+	verbose: false,
 	templateFileContentReplaceOperations: [
 		voaMakeContentReplaceOperation("name", process.argv[2]),
 		voaMakeContentReplaceOperation("date", new Date().toDateString()),

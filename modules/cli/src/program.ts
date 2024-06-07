@@ -1,6 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import * as process from "node:process";
-import { makeProjectCommand } from "./commands/projects.js";
+import { makeProjectCommand } from "./commands/projects";
 
 export const voaProgram = new Command();
 

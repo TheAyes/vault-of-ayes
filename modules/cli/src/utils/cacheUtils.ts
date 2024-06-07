@@ -1,4 +1,4 @@
-import { voaLog } from "./loggingUtils.js";
+import { voaLog } from "./consoleUtils";
 
 type StoreEntry<T = unknown> = {
 	current: T;

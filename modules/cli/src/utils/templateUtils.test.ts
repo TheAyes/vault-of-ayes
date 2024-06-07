@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeAll, afterEach } from "vitest";
-import { voaRetrieveTemplateFiles } from "./templateUtils.js";
+import { voaRetrieveTemplateFiles } from "./templateUtils";
 import {type fs, vol} from "memfs";
 
 

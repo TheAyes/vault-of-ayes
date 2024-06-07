@@ -1,5 +1,5 @@
-import { voaReadDir } from "./filesystemUtils.js";
-import { voaLog } from "./loggingUtils.js";
+import { voaLog } from "./consoleUtils";
+import { voaReadDir } from "./filesystemUtils";
 
 export const voaRetrieveTemplateFiles = async (directoryPath: string) => {
 	voaLog(`Trying to retrieve templates from ${directoryPath}`, {
@@ -7,3 +7,5 @@ export const voaRetrieveTemplateFiles = async (directoryPath: string) => {
 	});
 	return await voaReadDir(directoryPath);
 };
+
+voaLog(await voaRetrieveTemplateFiles("../../"));

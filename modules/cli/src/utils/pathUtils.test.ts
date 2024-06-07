@@ -1,7 +1,8 @@
 import {describe, expect, test, afterEach, vi} from "vitest";
-import { VoaPathLike } from "../types.js";
-import {voaIsFileOrDir, voaJoin, voaNormalize, voaExists, voaDirname} from "./pathUtils.js";
+import { VoaPathLike } from "../types";
+import {voaIsFileOrDir, voaJoin, voaNormalize, voaExists, voaDirname} from "./pathUtils";
 import {vol} from "memfs";
+import * as fs from "node:fs";
 
 const isWindows = process.platform === "win32";
 

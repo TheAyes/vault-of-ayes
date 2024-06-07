@@ -1,13 +1,19 @@
 import path from "path";
-import { VoaPathLike } from "../types.js";
-import { voaAccess, voaLStat } from "./filesystemUtils.js";
-import { voaLog } from "./loggingUtils.js";
+import { VoaPathLike } from "../types";
+import { voaLog } from "./consoleUtils";
+import { voaAccess, voaLStat } from "./filesystemUtils";
 
 export const voaNormalize = (pathUrl: string) => {
-	voaLog(`Normalizing path: ${pathUrl}`, { logLevel: "debug" });
+	voaLog(`Normalizing path: ${pathUrl}`, {
+		logLevel: "debug",
+		verboseOnly: true
+	});
 
 	let result = path.normalize(pathUrl);
-	voaLog(`Normalized path to: ${result}`, { logLevel: "debug" });
+	voaLog(`Normalized path to: ${result}`, {
+		logLevel: "debug",
+		verboseOnly: true
+	});
 
 	if (process.platform === "win32") {
 		if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
@@ -18,10 +24,10 @@ export const voaNormalize = (pathUrl: string) => {
 };
 
 export const voaJoin = (...paths: string[]) => {
-	voaLog(`Joining paths: ${paths}`, { logLevel: "debug" });
+	voaLog(`Joining paths: ${paths}`, { logLevel: "debug", verboseOnly: true });
 
 	const result = path.join(...paths);
-	voaLog(`Paths joined: ${result}`, { logLevel: "debug" });
+	voaLog(`Paths joined: ${result}`, { logLevel: "debug", verboseOnly: true });
 
 	return voaNormalize(result);
 };

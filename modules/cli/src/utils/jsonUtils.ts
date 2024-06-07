@@ -1,4 +1,4 @@
-import { INDENT_SIZE } from "../config.js";
+import { INDENT_SIZE } from "../config";
 
 export const voaStringify = (value: any) =>
 	JSON.stringify(value, null, INDENT_SIZE);

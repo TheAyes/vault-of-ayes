@@ -11,7 +11,8 @@
 		"esModuleInterop": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"target": "ES2022",
+		"sourceMap": true,
+		"target": "ES2017",
 		"lib": [
 			"ESNext",
 			"DOM"

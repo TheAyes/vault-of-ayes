@@ -6,15 +6,13 @@ import {
 	readFile,
 	writeFile
 } from "node:fs/promises";
-import { UTF8_ENCODING } from "../config.js";
 import {
 	VoaCreateDirOptions,
 	VoaPathLike,
-	VoaReadDirFunction,
 	VoaWriteFileOptions
-} from "../types.js";
-import { voaLog } from "./loggingUtils.js";
-import path from "./pathUtils.js";
+} from "../types";
+import { voaLog } from "./consoleUtils";
+import path, { voaPath } from "./pathUtils";
 
 export const voaWriteFile = async (
 	file: VoaPathLike,
@@ -52,11 +50,39 @@ export const voaCreateDir = async (
 	);
 };
 
-export const voaReadDir: VoaReadDirFunction = async (dir) => {
-	return await readdir(dir, {
-		encoding: UTF8_ENCODING,
-		recursive: true
+export const voaReadDir = async (dir: string) => {
+	type FileStructure = Array<{
+		name: string;
+		files: string[];
+		directories: FileStructure;
+	}>;
+	const files: string[] = [];
+	const directories: FileStructure = [];
+	const entries = await readdir(dir, {
+		encoding: "utf8"
 	});
+	for (const entry of entries) {
+		const fullPath = voaPath.join(dir, entry);
+		const stats = await lstat(fullPath);
+		if (stats.isDirectory()) {
+			const directoryDetail = await voaReadDir(fullPath);
+			directories.push({
+				name: entry,
+				files: directoryDetail.files,
+				directories: directoryDetail.directories
+			});
+		} else if (stats.isFile()) {
+			files.push(entry);
+		}
+	}
+	return {
+		name: path.basename(dir),
+		files: files,
+		directories: directories
+	};
 };
+
+const result = await voaReadDir("../../");
+voaLog(result);
 
 export const voaLStat = (pathUrl: VoaPathLike) => lstat(pathUrl);
