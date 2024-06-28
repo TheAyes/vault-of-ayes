@@ -1,8 +1,7 @@
 import { inject, injectable } from "inversify";
 import type { INodeFsPromises } from "../externals.interface.ts";
-import { TYPES, type VoaCreateDirOptions } from "../types";
+import { TYPES } from "../types";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
-
 import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
 import type { IPathUtils } from "./pathUtils.interface.ts";
 
@@ -15,8 +14,8 @@ export class FilesystemUtils implements IFilesystemUtils {
 	) {}
 
 	public voaMakeFile: IFilesystemUtils["voaMakeFile"] = async (
-		file: string,
-		content: string,
+		file,
+		content,
 		{ dry = false } = {}
 	) => {
 		this.consoleUtils.log(
@@ -32,28 +31,25 @@ export class FilesystemUtils implements IFilesystemUtils {
 		}
 	};
 
-	public voaReadFile = async (file: string): Promise<string> => {
-		return await this.fs.readFile(file, { encoding: "utf-8" });
-	};
+	public voaReadFile: IFilesystemUtils["voaReadFile"] = async (file) =>
+		await this.fs.readFile(file, { encoding: "utf-8" });
 
-	voaMakeDir = async (
-		dir: string,
-		options: VoaCreateDirOptions = {
+	voaMakeDir: IFilesystemUtils["voaMakeDir"] = async (
+		dir,
+		options = {
 			dry: false
 		}
-	) => {
+	) =>
 		this.consoleUtils.log(
 			`Create dir received properties:\n  dir: ${dir}\n  dry: ${options.dry}`
 		);
-	};
 
-	voaReadDir: IFilesystemUtils["voaReadDir"] = async (dir: string) => {
-		return this.fs.readdir(dir);
-	};
+	voaReadDir: IFilesystemUtils["voaReadDir"] = async (dir) =>
+		this.fs.readdir(dir);
 
 	voaFindProjectRoot: IFilesystemUtils["voaFindProjectRoot"] = async (
-		startDir: string = "."
-	): Promise<string> => {
+		startDir = "."
+	) => {
 		const maxDepth: number = 5;
 		let iterations = 0;
 
@@ -82,18 +78,25 @@ export class FilesystemUtils implements IFilesystemUtils {
 	};
 
 	voaFindConfigPath: IFilesystemUtils["voaFindConfigPath"] = async (
-		startDir: string
+		startDir
 	) => {
 		const root = await this.voaFindProjectRoot(startDir);
+		if (!root) {
+			this.consoleUtils.error("Couldn't find project root.");
+			return;
+		}
+
 		const voaConfigPath = this.pathUtils.join(root, "config.ts");
 
 		if (await this.voaExists(voaConfigPath)) return voaConfigPath;
-		return "";
+		this.consoleUtils.error("Config file seems to not exist.");
+		return undefined;
 	};
 
-	voaLStat = (pathUrl: string) => this.fs.lstat(pathUrl);
+	voaLStat: IFilesystemUtils["voaLStat"] = (pathUrl) =>
+		this.fs.lstat(pathUrl);
 
-	voaIsFileOrDir = async (pathUrl: string) => {
+	voaIsFileOrDir: IFilesystemUtils["voaIsFileOrDir"] = async (pathUrl) => {
 		const templateLStat = await this.voaLStat(pathUrl);
 		const isFile = templateLStat.isFile();
 		const isDir = templateLStat.isDirectory();
@@ -101,7 +104,7 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return { isFile, isDir };
 	};
 
-	voaExists = async (pathUrl: string) => {
+	voaExists: IFilesystemUtils["voaExists"] = async (pathUrl) => {
 		try {
 			const normalizedPath = this.pathUtils.normalize(pathUrl.toString());
 			await this.voaAccess(normalizedPath);
@@ -111,6 +114,6 @@ export class FilesystemUtils implements IFilesystemUtils {
 		}
 	};
 
-	voaAccess = async (path: string, mode?: number) =>
+	voaAccess: IFilesystemUtils["voaAccess"] = async (path, mode) =>
 		this.fs.access(path, mode);
 }

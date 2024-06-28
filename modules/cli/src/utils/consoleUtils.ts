@@ -31,7 +31,7 @@ export class ConsoleUtils implements IConsoleUtils {
 		return;
 	}*/
 
-	constructor(@inject("Logger") private logger: ILogger) {}
+	constructor(@inject("Logger") private logger: ILogger, @inject("")) {}
 
 	public log(message: any) {
 		this.baseLog(message, { logLevel: "log" });
