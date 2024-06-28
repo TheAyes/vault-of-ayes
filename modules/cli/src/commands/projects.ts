@@ -1,12 +1,14 @@
-import { Command } from "@commander-js/extra-typings";
-import { vol } from "memfs";
-import {
-	voaFindProjectRoot,
-	voaJoin,
-	voaNormalize
-} from "../utils/pathUtils.js";
-import { voaRetrieveTemplateFiles } from "../utils/templateUtils.js";
+import {Command} from "@commander-js/extra-typings";
+import {injectable} from "inversify";
+import {vol} from "memfs";
+import {voaFindProjectRoot} from "../utils/filesystemUtils";
+import {voaJoin, voaNormalize} from "../utils/pathUtils.js";
+import {voaRetrieveTemplateFiles} from "../utils/templateUtils.js";
 
+export class ProjectFactory {
+}
+
+@injectable()
 export const makeProjectCommand = () => {
 	const projects = new Command("projects").option("--dry");
 
@@ -29,9 +31,9 @@ export const makeProjectCommand = () => {
 
 			console.log(templateFiles);
 
-			templateFiles.forEach((currentFile, index) => {
-				//vol.mk;
-			});
+			//templateFiles.forEach((currentFile, index) => {
+			//	//vol.mk;
+			//});
 		});
 
 	projects

@@ -2,10 +2,14 @@
 	"name": "@vault-of-ayes/root",
 	"author": "Justin 'Ayes' Schildt",
 	"repository": "",
+	"workspaces": [
+		"modules/*"
+	],
 	"devDependencies": {
 		"prettier": "latest",
 		"typescript": "^5.4.5",
 		"@types/node": "^20.12.7",
+		"@types/bun": "^1.1.4",
 		"esrun": "^3.2.26",
 		"vitest": "^1.5.0",
 		"@vitest/coverage-v8": "^1.5.0",

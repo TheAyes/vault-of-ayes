@@ -1,19 +1,20 @@
-import { ObjectEncodingOptions, PathLike } from "node:fs";
-import { logLevels } from "./utils/consoleUtils";
+import type { ObjectEncodingOptions, PathLike } from "node:fs";
 
-export type LogLevel = (typeof logLevels)[number];
 export type TemplateReplaceOperation = (previousValue: string) => string;
 
 export type CLIConfig = {
-	logLevel: LogLevel["id"];
+	logLevel: LogLevel; // FIX
 	verbose: boolean;
-	templateFileContentReplaceOperations: TemplateReplaceOperation[];
-	templateDirNameReplaceOperations: TemplateReplaceOperation[];
+	readonly templateExtension: string;
+	readonly indentSize: number;
+	readonly encoding: BufferEncoding;
+	readonly templateFileContentReplaceOperations: readonly TemplateReplaceOperation[];
+	readonly templateDirNameReplaceOperations: readonly TemplateReplaceOperation[];
 };
 
 // Log
 export type VoaLogOptions = {
-	logLevel?: LogLevel["id"];
+	logLevel?: LogLevel; // FIX
 	verboseOnly?: boolean;
 };
 export type VoaLogFunction = (message: any, options?: VoaLogOptions) => void;
@@ -23,6 +24,10 @@ export type VoaFilesystemOptions = { dry?: boolean };
 export type VoaWriteFileOptions = VoaFilesystemOptions;
 export type VoaCreateDirOptions = VoaFilesystemOptions;
 export type VoaReadDirFunction = (dir: VoaPathLike) => Promise<string[]>;
-
+export type FileStructure = Array<{
+	name: string;
+	files: string[];
+	directories: FileStructure;
+}>;
 export type VoaPathLike = PathLike;
 export type VoaObjectEncodingOptions = ObjectEncodingOptions;

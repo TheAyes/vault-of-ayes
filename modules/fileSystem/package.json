@@ -1,0 +1,8 @@
+{
+	"name": "@vault-of-ayes/filesystem",
+	"main": "src/index.ts",
+	"dependencies": {
+		"inversify": "^6.0.2",
+		"reflect-metadata": "^0.2.2"
+	}
+}

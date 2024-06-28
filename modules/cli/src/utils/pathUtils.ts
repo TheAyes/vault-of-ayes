@@ -1,92 +1,84 @@
-import path from "path";
-import { VoaPathLike } from "../types";
-import { voaLog } from "./consoleUtils";
-import { voaAccess, voaLStat } from "./filesystemUtils";
+import { inject, injectable } from "inversify";
+import type { IConsoleUtils } from "./filesystemUtils.ts";
 
-export const voaNormalize = (pathUrl: string) => {
-	voaLog(`Normalizing path: ${pathUrl}`, {
-		logLevel: "debug",
-		verboseOnly: true
-	});
+import type { IPathUtils } from "./pathUtils.interface.ts";
 
-	let result = path.normalize(pathUrl);
-	voaLog(`Normalized path to: ${result}`, {
-		logLevel: "debug",
-		verboseOnly: true
-	});
+@injectable()
+export class PathUtils implements IPathUtils {
+	constructor(
+		@inject("PathUtils") private path: IPathUtils,
+		@inject("ConsoleUtils") private consoleUtils: IConsoleUtils
+	) {}
 
-	if (process.platform === "win32") {
-		if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
+	// native path methods
+	get basename() {
+		return this.path.basename;
 	}
-	if (process.platform !== "win32") result = result.replace(/[A-Z]:/, "");
 
-	return result;
-};
-
-export const voaJoin = (...paths: string[]) => {
-	voaLog(`Joining paths: ${paths}`, { logLevel: "debug", verboseOnly: true });
-
-	const result = path.join(...paths);
-	voaLog(`Paths joined: ${result}`, { logLevel: "debug", verboseOnly: true });
-
-	return voaNormalize(result);
-};
-
-export const voaIsFileOrDir = async (filePath: string) => {
-	const templateLStat = await voaLStat(filePath);
-	const isFile = templateLStat.isFile();
-	const isDir = templateLStat.isDirectory();
-
-	return { isFile, isDir };
-};
-export const voaExists = async (pathUrl: VoaPathLike) => {
-	try {
-		const normalizedPath = voaNormalize(pathUrl.toString());
-		await voaAccess(normalizedPath);
-		return true;
-	} catch {
-		return false;
+	get delimiter() {
+		return this.path.delimiter;
 	}
-};
 
-export const voaDirname = (pathUrl: string) => path.dirname(pathUrl);
+	get extname() {
+		return this.path.extname;
+	}
 
-export const voaResolve = (...paths: string[]) => path.resolve(...paths);
-export const voaPath = {
-	...path,
-	normalize: voaNormalize,
-	join: voaJoin,
-	isFileOrDir: voaIsFileOrDir,
-	exists: voaExists,
-	resolve: voaResolve,
-	dirname: voaDirname
-};
+	get format() {
+		return this.path.format;
+	}
 
-export const voaFindProjectRoot = async (
-	startDir: string = "."
-): Promise<string> => {
-	const maxDepth: number = 5;
-	let iterations = 0;
+	get isAbsolute() {
+		return this.path.isAbsolute;
+	}
 
-	const recursiveSearch = async (currentDir: string): Promise<string> => {
-		try {
-			const packageJsonPath = voaJoin(currentDir, "package.json");
-			await voaAccess(packageJsonPath);
-			return currentDir;
-		} catch {
-			if (iterations > maxDepth) {
-				return "";
-			} else {
-				iterations++;
+	get parse() {
+		return this.path.parse;
+	}
 
-				const parentDir = voaJoin(currentDir, "..");
-				return recursiveSearch(parentDir);
-			}
+	get sep() {
+		return this.path.sep;
+	}
+
+	normalize(pathUrl: string) {
+		this.consoleUtils.voaLog(`Normalizing path: ${pathUrl}`, {
+			logLevel: "debug",
+			verboseOnly: true
+		});
+
+		let result = this.path.normalize(pathUrl);
+		this.consoleUtils.voaLog(`Normalized path to: ${result}`, {
+			logLevel: "debug",
+			verboseOnly: true
+		});
+
+		if (process.platform === "win32") {
+			if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
 		}
-	};
-	const result = await recursiveSearch(startDir);
-	voaLog(`Found project root: ${result}`, { logLevel: "info" });
-	return result;
-};
+		if (process.platform !== "win32") result = result.replace(/[A-Z]:/, "");
 
-export default voaPath;
+		return result;
+	}
+
+	join(...paths: string[]) {
+		this.consoleUtils.voaLog(`Joining paths: ${paths}`, {
+			logLevel: "debug",
+			verboseOnly: true
+		});
+
+		const result: string = this.path.join(...paths);
+		this.consoleUtils.voaLog(`Paths joined: ${result}`, {
+			logLevel: "debug",
+			verboseOnly: true
+		});
+
+		return this.normalize(result);
+	}
+
+	dirname(pathUrl: string) {
+		return this.path.dirname(pathUrl);
+	}
+
+	resolve(...paths: string[]) {
+		return this.path.resolve(...paths);
+	}
+}

@@ -2,20 +2,26 @@
 	"name": "@vault-of-ayes/cli",
 	"type": "module",
 	"scripts": {
-		"build": "tsc --build",
-		"build:watch": "tsc --watch",
+		"build-js": "bun build --target node --sourcemap ./src/program.ts --outfile ./bin/voa.js",
+		"build-exe": "bun build --target node --compile --sourcemap ./src/program.ts --outfile ./bin/voa",
+		"build:watch": "bun run build-js --watch",
 		"test": "vitest run --coverage --silent",
 		"test:watch": "vitest --coverage --silent",
 		"dev": "pnpm run \"/.*:watch$/\"",
 		"exp": "npx tsx ./scripts/experiments.ts"
 	},
 	"bin": {
-		"voa": "dist/src/program.js"
+		"voa": "dist/program.exe"
 	},
-	"devDependencies": {
+	"dependencies": {
+		"bun": "^1.1.17",
 		"commander": "^12.0.0-1",
-		"@commander-js/extra-typings": "^12.0.0-1",
 		"chalk": "^5.3.0",
 		"memfs": "^4.8.2"
+	},
+	"devDependencies": {
+		"tsx": "^4.15.2",
+		"esbuild": "^0.21.5",
+		"@commander-js/extra-typings": "^12.0.0-1"
 	}
 }

@@ -1,6 +1,10 @@
+#!/usr/bin/env node
+
+// TODO: Can we apply dependency injection here?
+
 import { Command } from "@commander-js/extra-typings";
-import * as process from "node:process";
 import { makeProjectCommand } from "./commands/projects";
+import "reflect-metadata";
 
 export const voaProgram = new Command();
 
@@ -16,14 +20,6 @@ voaProgram.configureOutput({
 
 voaProgram.option("--verbose");
 
-/*voaProgram.action(() => {
-	voaLog("Hello Debug!", { logLevel: "debug" });
-	voaLog("Hello Log!", { logLevel: "log" });
-	voaLog("Hello Info!", { logLevel: "info" });
-	voaLog("Hello Warn!", { logLevel: "warn" });
-	voaLog("Hello Error!", { logLevel: "error" });
-});*/
-
 voaProgram.addCommand(makeProjectCommand());
 
-voaProgram.parse();
+voaProgram.parse(process.argv);

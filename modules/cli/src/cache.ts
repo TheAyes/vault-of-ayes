@@ -1,5 +1,5 @@
 import { Cache } from "./utils/cacheUtils";
-import { voaFindProjectRoot } from "./utils/pathUtils";
+import { voaFindProjectRoot } from "./utils/filesystemUtils";
 
 export const cache: Cache = new Cache();
 
