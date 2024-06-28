@@ -7,6 +7,7 @@
     </option>
     <option name="DO_NOT_FORMAT">
       <list>
+        <fileSet type="globPattern" pattern="*.{md,mdx}" />
         <fileSet type="globPattern" pattern="build/" />
         <fileSet type="globPattern" pattern="dist/" />
         <fileSet type="globPattern" pattern="node_modules/" />

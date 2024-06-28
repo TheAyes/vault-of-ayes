@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="ProjectScope" pattern="!file[vault-of-ayes]:.idea//*&amp;&amp;!file[vault-of-ayes]:docs/.obsidian//*&amp;&amp;!file:bun.lockb" />
+</component>
