@@ -13,9 +13,9 @@ export interface IFilesystemUtils {
 
 	voaReadDir(dir: string): Promise<string[]>;
 
-	voaFindProjectRoot(startDir?: string): Promise<string>;
+	voaFindProjectRoot(startDir?: string): Promise<string | undefined>;
 
-	voaFindConfigPath(startDir: string): Promise<string>;
+	voaFindConfigPath(startDir: string): Promise<string | undefined>;
 
 	voaLStat(pathUrl: string): Promise<Stats>;
 
