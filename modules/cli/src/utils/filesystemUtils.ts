@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import type { INodeFsPromises } from "../externals.interface.ts";
-import type { VoaCreateDirOptions, VoaWriteFileOptions } from "../types";
+import { TYPES, type VoaCreateDirOptions } from "../types";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
 
 import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
@@ -9,15 +9,15 @@ import type { IPathUtils } from "./pathUtils.interface.ts";
 @injectable()
 export class FilesystemUtils implements IFilesystemUtils {
 	constructor(
-		@inject("NodeFsPromises") private fs: INodeFsPromises,
-		@inject("ConsoleUtils") private consoleUtils: IConsoleUtils,
-		@inject("PathUtils") private pathUtils: IPathUtils
+		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
+		@inject(TYPES.ConsoleUtils) private consoleUtils: IConsoleUtils,
+		@inject(TYPES.PathUtils) private pathUtils: IPathUtils
 	) {}
 
-	public voaMakeFile = async (
+	public voaMakeFile: IFilesystemUtils["voaMakeFile"] = async (
 		file: string,
 		content: string,
-		{ dry = false }: VoaWriteFileOptions = {}
+		{ dry = false } = {}
 	) => {
 		this.consoleUtils.log(
 			`Write File received properties:\n  file: ${file}\n  content: ${content}\n  dry: ${dry}`
@@ -47,36 +47,13 @@ export class FilesystemUtils implements IFilesystemUtils {
 		);
 	};
 
-	voaReadDir = async (dir: string) => {
-		/*const files: string[] = [];
-		const directories: FileStructure = [];
-		const entries = await readdir(dir, {
-			encoding: "utf8"
-		});
-		for (const entry of entries) {
-			const fullPath = voaPath.join(dir, entry);
-			const stats = await lstat(fullPath);
-			if (stats.isDirectory()) {
-				const directoryDetail = await this.voaReadDir(fullPath);
-				directories.push({
-					name: entry,
-					files: directoryDetail.files,
-					directories: directoryDetail.directories
-				});
-			} else if (stats.isFile()) {
-				files.push(entry);
-			}
-		}
-		return {
-			name: voaPath.basename(dir.toString()),
-			files: files,
-			directories: directories
-		};*/
-
+	voaReadDir: IFilesystemUtils["voaReadDir"] = async (dir: string) => {
 		return this.fs.readdir(dir);
 	};
 
-	voaFindProjectRoot = async (startDir: string = "."): Promise<string> => {
+	voaFindProjectRoot: IFilesystemUtils["voaFindProjectRoot"] = async (
+		startDir: string = "."
+	): Promise<string> => {
 		const maxDepth: number = 5;
 		let iterations = 0;
 
@@ -104,7 +81,9 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return result;
 	};
 
-	voaFindConfigPath = async (startDir: string) => {
+	voaFindConfigPath: IFilesystemUtils["voaFindConfigPath"] = async (
+		startDir: string
+	) => {
 		const root = await this.voaFindProjectRoot(startDir);
 		const voaConfigPath = this.pathUtils.join(root, "config.ts");
 

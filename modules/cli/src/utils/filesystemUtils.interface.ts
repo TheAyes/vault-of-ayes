@@ -1,16 +1,15 @@
 import type { Stats } from "node:fs";
-import type { VoaCreateDirOptions, VoaWriteFileOptions } from "../types.ts";
 
 export interface IFilesystemUtils {
 	voaMakeFile(
 		file: string,
 		content: string,
-		options?: VoaWriteFileOptions
+		options?: { dry?: boolean }
 	): Promise<void>;
 
 	voaReadFile(file: string): Promise<string>;
 
-	voaMakeDir(dir: string, options?: VoaCreateDirOptions): Promise<void>;
+	voaMakeDir(dir: string, options?: { dry?: boolean }): Promise<void>;
 
 	voaReadDir(dir: string): Promise<string[]>;
 

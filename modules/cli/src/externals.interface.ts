@@ -1,3 +1,4 @@
+import type { Command } from "@commander-js/extra-typings";
 import type chalk from "chalk";
 import console from "node:console";
 import fs from "node:fs";
@@ -24,3 +25,5 @@ export interface INodeFsPromises {
 }
 
 export type Chalk = typeof chalk;
+
+export type ICommand = typeof Command;
