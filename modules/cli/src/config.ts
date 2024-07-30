@@ -10,20 +10,11 @@ import type { IPathUtils } from "./utils/pathUtils.interface.ts";
 
 @injectable()
 export class CliConfig implements ICliConfig {
-	public readonly logLevels: ICliConfig["logLevels"] = [
-		{ id: "debug", caption: "DEBUG", color: this.chalk.bgRgb(40, 40, 40) },
-		{ id: "log", caption: "LOG", color: this.chalk.bgGrey },
-		{ id: "info", caption: "INFO", color: this.chalk.bgBlue },
-		{ id: "warn", caption: "WARN", color: this.chalk.bgYellow },
-		{ id: "error", caption: "ERROR", color: this.chalk.bgRed },
-		{ id: "none", caption: "NONE", color: this.chalk.black }
-	];
-
+	public readonly logLevels: ICliConfig["logLevels"];
 	public readonly templateExtension: ICliConfig["templateExtension"] =
 		".template";
 	public readonly indentSize: ICliConfig["indentSize"] = 4;
 	public readonly encoding: ICliConfig["encoding"] = "utf-8";
-
 	public logLevel: ICliConfig["logLevel"] = "debug";
 	public templateFileContentReplaceOperations = [
 		voaMakeContentReplaceOperation("name", process.argv[2]),
@@ -40,14 +31,28 @@ export class CliConfig implements ICliConfig {
 		@inject("FileSystemUtils") private fs: IFilesystemUtils,
 		@inject("PathUtils") private pathUtils: IPathUtils,
 		@inject("Chalk") private chalk: Chalk
-	) {}
+	) {
+		this.logLevels = [
+			{
+				id: "debug",
+				caption: "DEBUG",
+				color: this.chalk.bgRgb(40, 40, 40)
+			},
+			{ id: "log", caption: "LOG", color: this.chalk.bgGrey },
+			{ id: "info", caption: "INFO", color: this.chalk.bgBlue },
+			{ id: "warn", caption: "WARN", color: this.chalk.bgYellow },
+			{ id: "error", caption: "ERROR", color: this.chalk.bgRed },
+			{ id: "none", caption: "NONE", color: this.chalk.black }
+		];
+	}
 
 	public findVoaConfig = async () => {
 		const root = await this.fs.voaFindProjectRoot();
-		const voaConfigPath = this.pathUtils.join(root, "config.ts");
+		if (root) {
+			const voaConfigPath = this.pathUtils.join(root, "config.ts");
 
-		if (await this.fs.voaExists(voaConfigPath)) return voaConfigPath;
-
+			if (await this.fs.voaExists(voaConfigPath)) return voaConfigPath;
+		}
 		return undefined;
 	};
 

@@ -1,4 +1,6 @@
-import { voaLog } from "./consoleUtils";
+import { inject, injectable } from "inversify";
+import type { ILogger } from "../externals.interface.ts";
+import { TYPES } from "../types.ts";
 
 type StoreEntry<T = unknown> = {
 	current: T;
@@ -7,8 +9,11 @@ type StoreEntry<T = unknown> = {
 	ttl: number;
 };
 
+@injectable()
 export class Cache {
 	private store = new Map<PropertyKey, StoreEntry>();
+
+	constructor(@inject(TYPES.Logger) private logger: ILogger) {}
 
 	public initCacheEntry = async <T>(
 		key: PropertyKey,
@@ -47,7 +52,7 @@ export class Cache {
 				current,
 				ttl: storeItem.ttl
 			});
-			voaLog(`Refreshed cached store entry. Expires: ${expiry}`);
+			this.logger.log(`Refreshed cached store entry. Expires: ${expiry}`);
 		}
 
 		return current as T;

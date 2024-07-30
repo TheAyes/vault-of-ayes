@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { inject, injectable } from "inversify";
-import { cliConfig, logLevels } from "../config.js";
+import type { ICliConfig } from "../config.interface.ts";
 import type { ILogger } from "../externals.interface.ts";
-import type { LogLevel, VoaLogOptions } from "../types";
+import { TYPES } from "../types";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
 
 import { colorSyntax } from "./syntaxLoggingUtils";
@@ -31,32 +31,39 @@ export class ConsoleUtils implements IConsoleUtils {
 		return;
 	}*/
 
-	constructor(@inject("Logger") private logger: ILogger, @inject("")) {}
+	constructor(
+		@inject(TYPES.Logger) private logger: ILogger,
+		@inject(TYPES.CliConfig) private config: ICliConfig
+	) {}
 
 	public log(message: any) {
-		this.baseLog(message, { logLevel: "log" });
+		this.baseLog(message, "log");
 	}
 
 	public info(message: any) {
-		this.baseLog(message, { logLevel: "info" });
+		this.baseLog(message, "info");
 	}
 
 	public warn(message: any) {
-		this.baseLog(message, { logLevel: "warn" });
+		this.baseLog(message, "warn");
 	}
 
 	public error(message: any) {
-		this.baseLog(message, { logLevel: "error" });
+		this.baseLog(message, "error");
 	}
 
-	private baseLog(message: any, { logLevel = "log" }: VoaLogOptions = {}) {
-		if (this.shouldLog({ logLevel }) || logLevel === "none") return;
+	private baseLog(
+		message: any,
+		logLevel: ICliConfig["logLevels"][number]["id"] = "log"
+	) {
+		if (this.shouldLog(logLevel) || logLevel === "none") return;
 
-		let logLevelObject = logLevels.find(
+		let logLevelObject = this.config.logLevels.find(
 			(value) => value.id === logLevel
 		) ?? {
 			id: logLevel,
-			caption: logLevel.toUpperCase() as LogLevel["caption"],
+			caption:
+				logLevel.toUpperCase() as ICliConfig["logLevels"][number]["caption"],
 			color: chalk.white
 		};
 
@@ -67,21 +74,24 @@ export class ConsoleUtils implements IConsoleUtils {
 		//message = `${logLevelPrefix} ${message}`;
 		const coloredMessage = colorSyntax(`${message}`);
 
-		this.logger[logLevel](`${logLevelObject.caption}:`, coloredMessage);
+		this.logger[logLevel as keyof ILogger](
+			`${logLevelObject.caption}:`,
+			coloredMessage
+		);
 	}
 
-	private shouldLog({
-		logLevel = "log",
-		verboseOnly = false
-	}: VoaLogOptions = {}): boolean {
+	private shouldLog(
+		logLevel: ICliConfig["logLevels"][number]["id"] = "log"
+	): boolean {
 		// Exit early if global log level is set to "none"
-		if (cliConfig.logLevel === "none") return false;
+		if (this.config.logLevel === "none") return false;
 
 		// Introduce variable for index comparison to make the logic understandable
-		const logLevelComparison =
-			logLevels.findIndex((value) => value.id === logLevel) >=
-			logLevels.findIndex((value) => value.id === cliConfig.logLevel);
-
-		return logLevelComparison && !(verboseOnly && !cliConfig.verbose);
+		return (
+			this.config.logLevels.findIndex((value) => value.id === logLevel) >=
+			this.config.logLevels.findIndex(
+				(value) => value.id === this.config.logLevel
+			)
+		);
 	}
 }

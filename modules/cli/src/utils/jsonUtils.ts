@@ -1,6 +1,15 @@
-import { cliConfig } from "../config";
+import { inject, injectable } from "inversify";
 
-export const voaStringify = (value: any) =>
-	JSON.stringify(value, null, cliConfig.indentSize);
+import type { ICliConfig } from "../config.interface.ts";
+import { TYPES } from "../types.ts";
+import type { IJsonUtils } from "./jsonUtils.interface.ts";
 
-export const voaParseJson = (text: string) => JSON.parse(text);
+@injectable()
+export class JsonUtils implements IJsonUtils {
+	constructor(@inject(TYPES.CliConfig) private config: ICliConfig) {}
+
+	public stringify: IJsonUtils["stringify"] = (value) =>
+		JSON.stringify(value, null, this.config.indentSize);
+
+	public parseJson: IJsonUtils["parseJson"] = (text) => JSON.parse(text);
+}
