@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import type { ILogger } from "../externals.interface.ts";
 import { TYPES } from "../types.ts";
+import type { ICacheUtils } from "./cacheUtils.interface.ts";
 
 type StoreEntry<T = unknown> = {
 	current: T;
@@ -10,7 +11,7 @@ type StoreEntry<T = unknown> = {
 };
 
 @injectable()
-export class Cache {
+export class Cache implements ICacheUtils {
 	private store = new Map<PropertyKey, StoreEntry>();
 
 	constructor(@inject(TYPES.Logger) private logger: ILogger) {}

@@ -45,7 +45,7 @@ InversifyJS to handle DI.
 
 ```typescript
 @injectable()
-export class CliConfig implements ICliConfig {
+export class Config implements ICliConfig {
 	/* ... code omitted for brevity ... */
 	constructor(@inject("FileSystemUtils") private fs: IFilesystemUtils) {
 	}
@@ -54,10 +54,10 @@ export class CliConfig implements ICliConfig {
 }
 ```
 
-In the above code, the @injectable() decorator is used to declare that CliConfig is a
+In the above code, the @injectable() decorator is used to declare that Config is a
 class into which dependencies can be injected. The @inject("FileSystemUtils")
 decorator passes the IFilesystemUtils instance to the constructor parameter fs. In
-other words, the CliConfig class doesn't need to create an instance of
+other words, the Config class doesn't need to create an instance of
 FileSystemUtils. It is supplied (injected) with an instance when it is instantiated.
 
 ## Summary

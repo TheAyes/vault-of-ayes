@@ -6,7 +6,7 @@ import type { IJsonUtils } from "./jsonUtils.interface.ts";
 
 @injectable()
 export class JsonUtils implements IJsonUtils {
-	constructor(@inject(TYPES.CliConfig) private config: ICliConfig) {}
+	constructor(@inject(TYPES.Config) private config: ICliConfig) {}
 
 	public stringify: IJsonUtils["stringify"] = (value) =>
 		JSON.stringify(value, null, this.config.indentSize);

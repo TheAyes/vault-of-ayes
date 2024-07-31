@@ -1,16 +1,16 @@
+import type { IPaths } from "@vault-of-ayes/paths";
+import type { INodeFsPromises } from "@vault-of-ayes/shared";
+import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { INodeFsPromises } from "../externals.interface.ts";
-import { TYPES } from "../types";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
 import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
-import type { IPathUtils } from "./pathUtils.interface.ts";
 
 @injectable()
 export class FilesystemUtils implements IFilesystemUtils {
 	constructor(
 		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
 		@inject(TYPES.ConsoleUtils) private consoleUtils: IConsoleUtils,
-		@inject(TYPES.PathUtils) private pathUtils: IPathUtils
+		@inject(TYPES.PathUtils) private pathUtils: IPaths
 	) {}
 
 	public voaMakeFile: IFilesystemUtils["voaMakeFile"] = async (

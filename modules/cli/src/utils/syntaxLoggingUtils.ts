@@ -1,56 +1,68 @@
-import chalk from "chalk";
+import { inject, injectable } from "inversify";
+import type { Chalk } from "../externals.interface.ts";
+import { TYPES } from "../types.ts";
+import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 
-const timePattern = "\\[\\d{2}:\\d{2}:\\d{2}]";
-const syntaxMap = [
-	{
-		pattern: new RegExp(`${timePattern} (DEBUG)`),
-		color: chalk.rgb(100, 100, 100)
-	},
-	{
-		pattern: new RegExp(`${timePattern} (LOG)`),
-		color: chalk.rgb(150, 150, 150)
-	},
-	{
-		pattern: new RegExp(`${timePattern} (INFO)`),
-		color: chalk.blue
-	},
-	{
-		pattern: new RegExp(`${timePattern} (WARN)`),
-		color: chalk.yellow
-	},
-	{
-		pattern: new RegExp(`${timePattern} (ERROR)`),
-		color: chalk.redBright
-	},
-	{
-		pattern: new RegExp(`(${timePattern})`),
-		color: chalk.blueBright
-	},
-	{
-		pattern: /(".*"):/g,
-		color: chalk.redBright
-	},
-	{
-		pattern: /("[^"]*"),?\r?\n/g,
-		color: chalk.greenBright
-	},
-	{
-		pattern: /: (\d+)/g,
-		color: chalk.blue
-	},
-	{
-		pattern: /(?<!\d)([{}\][])(?!\d)/g,
-		color: chalk.yellow
+@injectable()
+export class SyntaxUtils implements ISyntaxUtils {
+	public readonly timePattern: ISyntaxUtils["timePattern"] =
+		"\\[\\d{2}:\\d{2}:\\d{2}]";
+	public readonly syntaxMap;
+
+	constructor(@inject(TYPES.Chalk) private chalk: Chalk) {
+		this.syntaxMap = [
+			{
+				pattern: new RegExp(`${this.timePattern} (DEBUG)`),
+				color: this.chalk.rgb(100, 100, 100)
+			},
+
+			{
+				pattern: new RegExp(`${this.timePattern} (LOG)`),
+				color: this.chalk.rgb(150, 150, 150)
+			},
+			{
+				pattern: new RegExp(`${this.timePattern} (INFO)`),
+				color: this.chalk.blue
+			},
+			{
+				pattern: new RegExp(`${this.timePattern} (WARN)`),
+				color: this.chalk.yellow
+			},
+			{
+				pattern: new RegExp(`${this.timePattern} (ERROR)`),
+				color: this.chalk.redBright
+			},
+			{
+				pattern: new RegExp(`(${this.timePattern})`),
+				color: this.chalk.blueBright
+			},
+			{
+				pattern: /(".*"):/g,
+				color: this.chalk.redBright
+			},
+			{
+				pattern: /("[^"]*"),?\r?\n/g,
+				color: this.chalk.greenBright
+			},
+			{
+				pattern: /: (\d+)/g,
+				color: this.chalk.blue
+			},
+			{
+				pattern: /(?<!\d)([{}\][])(?!\d)/g,
+				color: this.chalk.yellow
+			}
+		];
 	}
-];
 
-export const colorSyntax = (message: string) =>
-	syntaxMap.reduce(
-		(previousMessage, currentSyntax) =>
-			previousMessage.replace(
-				currentSyntax.pattern,
-				(substring, group1) =>
-					substring.replace(group1, currentSyntax.color(group1))
-			),
-		message
-	);
+	public colorSyntax = (message: string) =>
+		this.syntaxMap.reduce(
+			(previousMessage, currentSyntax) =>
+				previousMessage.replace(
+					currentSyntax.pattern,
+					(substring, group1) =>
+						substring.replace(group1, currentSyntax.color(group1))
+				),
+			message
+		);
+}

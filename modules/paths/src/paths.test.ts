@@ -1,6 +1,6 @@
 import {describe, expect, test, afterEach, vi} from "vitest";
-import { VoaPathLike } from "../types";
-import {voaIsFileOrDir, voaJoin, voaNormalize, voaExists, voaDirname} from "./pathUtils";
+
+import {Paths} from "./paths";
 import {vol} from "memfs";
 import * as fs from "node:fs";
 

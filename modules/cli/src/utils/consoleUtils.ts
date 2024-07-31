@@ -1,11 +1,9 @@
-import chalk from "chalk";
 import { inject, injectable } from "inversify";
 import type { ICliConfig } from "../config.interface.ts";
-import type { ILogger } from "../externals.interface.ts";
+import type { Chalk, ILogger } from "../externals.interface.ts";
 import { TYPES } from "../types";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
-
-import { colorSyntax } from "./syntaxLoggingUtils";
+import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 
 @injectable()
 export class ConsoleUtils implements IConsoleUtils {
@@ -33,7 +31,9 @@ export class ConsoleUtils implements IConsoleUtils {
 
 	constructor(
 		@inject(TYPES.Logger) private logger: ILogger,
-		@inject(TYPES.CliConfig) private config: ICliConfig
+		@inject(TYPES.Config) private config: ICliConfig,
+		@inject(TYPES.Chalk) private chalk: Chalk,
+		@inject(TYPES.SyntaxUtils) private syntaxUtils: ISyntaxUtils
 	) {}
 
 	public log(message: any) {
@@ -64,7 +64,7 @@ export class ConsoleUtils implements IConsoleUtils {
 			id: logLevel,
 			caption:
 				logLevel.toUpperCase() as ICliConfig["logLevels"][number]["caption"],
-			color: chalk.white
+			color: this.chalk.white
 		};
 
 		if (typeof message === "object") {
@@ -72,7 +72,7 @@ export class ConsoleUtils implements IConsoleUtils {
 		}
 
 		//message = `${logLevelPrefix} ${message}`;
-		const coloredMessage = colorSyntax(`${message}`);
+		const coloredMessage = this.syntaxUtils.colorSyntax(`${message}`);
 
 		this.logger[logLevel as keyof ILogger](
 			`${logLevelObject.caption}:`,

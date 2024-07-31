@@ -26,7 +26,7 @@ manifested:
 
 ## Cause of the Circular Dependency
 
-My project consists of [pathUtils.ts](../../modules/cli/src/utils/pathUtils.ts), a
+My project consists of [paths.ts](../../modules/cli/src/utils/pathUtils.ts), a
 custom wrapper around Node's Path
 class. The wrapper extends the functionality of the original class via logs and other
 additional functions. I have a
@@ -64,7 +64,7 @@ export const voaExists = async (pathUrl: VoaPathLike) => {
 The addition of these functions created a circular dependency as [
 `filesystemUtils.ts`](../../modules/cli/src/utils/filesystemUtils.ts) was already
 depending on [
-`pathUtils.ts`](../../modules/cli/src/utils/pathUtils.ts).
+`paths.ts`](../../modules/cli/src/utils/pathUtils.ts).
 
 ## The Breakdown and the Solution
 
@@ -79,7 +79,7 @@ configuration.
 
 By implementing the proposed solutions, I realized that all I needed to do was to
 move some of my code. Hence, I shifted
-some functions from [`pathUtils.ts`](../../modules/cli/src/utils/pathUtils.ts) to [
+some functions from [`paths.ts`](../../modules/cli/src/utils/pathUtils.ts) to [
 `filesystemUtils.ts`](../../modules/cli/src/utils/filesystemUtils.ts). This change
 successfully resolved the circular
 dependency issue.

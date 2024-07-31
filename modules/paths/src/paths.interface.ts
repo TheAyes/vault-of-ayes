@@ -1,6 +1,6 @@
 import type { FormatInputPathObject, ParsedPath } from "path";
 
-export interface IPathUtils {
+export interface IPaths {
 	normalize: (pathUrl: string) => string;
 	join: (...paths: string[]) => string;
 	dirname: (pathUrl: string) => string;

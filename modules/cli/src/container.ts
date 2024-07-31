@@ -23,4 +23,4 @@ container.bind<IConsoleUtils>(TYPES.ConsoleUtils).to(ConsoleUtils);
 container.bind<IPathUtils>(TYPES.PathUtils).to(PathUtils);
 container.bind<ILogger>(TYPES.Logger).toConstantValue(console);
 container.bind<Chalk>(TYPES.Chalk).toConstantValue(chalk);
-container.bind<ICliConfig>(TYPES.CliConfig).to(CliConfig);
+container.bind<ICliConfig>(TYPES.Config).to(CliConfig);

@@ -1,10 +1,9 @@
 {
-	"name": "@vault-of-ayes/filesystem",
-	"main": "src/index.ts",
+	"name": "@vault-of-ayes/paths",
+	"main": "src/paths.ts",
 	"type": "module",
 	"dependencies": {
-		"@vault-of-ayes/shared": "workspace:*",
-		"@vault-of-ayes/paths": "workspace:*"
+		"@vault-of-ayes/shared": "workspace:*"
 	},
 	"peerDependencies": {
 		"inversify": "^6.0.2",

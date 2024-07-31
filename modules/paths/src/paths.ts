@@ -1,12 +1,12 @@
+import type { IConsoleUtils } from "@vault-of-ayes/cli/src/utils/consoleUtils.interface.ts";
 import { inject, injectable } from "inversify";
-import type { IConsoleUtils } from "./filesystemUtils.ts";
 
-import type { IPathUtils } from "./pathUtils.interface.ts";
+import type { IPaths } from "./paths.interface.ts";
 
 @injectable()
-export class PathUtils implements IPathUtils {
+export class Paths implements IPaths {
 	constructor(
-		@inject("PathUtils") private path: IPathUtils,
+		@inject("PathUtils") private path: IPaths,
 		@inject("ConsoleUtils") private consoleUtils: IConsoleUtils
 	) {}
 
@@ -40,16 +40,8 @@ export class PathUtils implements IPathUtils {
 	}
 
 	normalize(pathUrl: string) {
-		this.consoleUtils.voaLog(`Normalizing path: ${pathUrl}`, {
-			logLevel: "debug",
-			verboseOnly: true
-		});
-
 		let result = this.path.normalize(pathUrl);
-		this.consoleUtils.voaLog(`Normalized path to: ${result}`, {
-			logLevel: "debug",
-			verboseOnly: true
-		});
+		this.consoleUtils.log(`Normalized path:\n${pathUrl} -> ${result}`);
 
 		if (process.platform === "win32") {
 			if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
@@ -60,16 +52,10 @@ export class PathUtils implements IPathUtils {
 	}
 
 	join(...paths: string[]) {
-		this.consoleUtils.voaLog(`Joining paths: ${paths}`, {
-			logLevel: "debug",
-			verboseOnly: true
-		});
+		this.consoleUtils.log(`Joining paths: ${paths}`);
 
 		const result: string = this.path.join(...paths);
-		this.consoleUtils.voaLog(`Paths joined: ${result}`, {
-			logLevel: "debug",
-			verboseOnly: true
-		});
+		this.consoleUtils.log(`Paths joined: ${result}`);
 
 		return this.normalize(result);
 	}
@@ -82,3 +68,5 @@ export class PathUtils implements IPathUtils {
 		return this.path.resolve(...paths);
 	}
 }
+
+export type { IPaths };
