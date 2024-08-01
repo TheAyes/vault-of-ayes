@@ -1,8 +1,8 @@
-import type { IFactory } from "@vault-of-ayes/factories/src/factory.interface.ts";
-import type { IFilesystemUtils } from "@vault-of-ayes/filesystem";
-import type { IPaths } from "@vault-of-ayes/paths";
 import { type Chalk, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
+import type { IFactory } from "../factory";
+import type { IFilesystemUtils } from "../filesystem";
+import type { IPaths } from "../paths";
 import type { ICliConfig } from "./config.interface.ts";
 
 @injectable()

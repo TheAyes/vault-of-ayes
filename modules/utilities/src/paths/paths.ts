@@ -1,5 +1,5 @@
-import type { IConsoleUtils } from "@vault-of-ayes/cli/src/utils/consoleUtils.interface.ts";
 import { inject, injectable } from "inversify";
+import type { IConsoleUtils } from "../console";
 
 import type { IPaths } from "./paths.interface.ts";
 

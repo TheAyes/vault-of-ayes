@@ -1,9 +1,8 @@
+import { type Chalk, type ILogger, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { ICliConfig } from "../config.interface.ts";
-import type { Chalk, ILogger } from "../externals.interface.ts";
-import { TYPES } from "../types";
+import type { ICliConfig } from "../config";
+import type { ISyntaxUtils } from "../syntaxHighlighting";
 import type { IConsoleUtils } from "./consoleUtils.interface.ts";
-import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 
 @injectable()
 export class ConsoleUtils implements IConsoleUtils {

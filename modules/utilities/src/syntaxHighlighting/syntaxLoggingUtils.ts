@@ -1,6 +1,6 @@
+import { type Chalk, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { Chalk } from "../externals.interface.ts";
-import { TYPES } from "../types.ts";
+
 import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 
 @injectable()

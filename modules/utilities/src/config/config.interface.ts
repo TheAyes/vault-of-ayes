@@ -1,5 +1,5 @@
-import type { IFactory } from "@vault-of-ayes/factories";
 import type { ChalkInstance } from "chalk";
+import type { IFactory } from "../factory";
 
 export interface ICliConfig {
 	readonly logLevels: { id: string; caption: string; color: ChalkInstance }[];

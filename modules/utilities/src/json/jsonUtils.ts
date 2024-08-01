@@ -1,7 +1,7 @@
+import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
+import type { ICliConfig } from "../config";
 
-import type { ICliConfig } from "../config.interface.ts";
-import { TYPES } from "../types.ts";
 import type { IJsonUtils } from "./jsonUtils.interface.ts";
 
 @injectable()

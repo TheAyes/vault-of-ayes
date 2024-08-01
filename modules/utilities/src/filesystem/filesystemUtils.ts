@@ -1,8 +1,8 @@
-import type { IPaths } from "@vault-of-ayes/paths";
 import type { INodeFsPromises } from "@vault-of-ayes/shared";
 import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { IConsoleUtils } from "./consoleUtils.interface.ts";
+import type { IConsoleUtils } from "../console";
+import type { IPaths } from "../paths";
 import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
 
 @injectable()
