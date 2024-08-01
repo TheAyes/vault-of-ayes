@@ -1,12 +1,9 @@
 {
 	"name": "@vault-of-ayes/shared",
-	"main": "src/index.ts",
 	"type": "module",
-	"dependencies": {
-	},
+	"main": "src/index.ts",
 	"peerDependencies": {
 		"inversify": "^6.0.2",
-		"reflect-metadata": "^0.2.2",
-		"@types/bun": "^1.1.6"
+		"reflect-metadata": "^0.2.2"
 	}
 }

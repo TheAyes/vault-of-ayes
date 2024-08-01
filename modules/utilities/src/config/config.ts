@@ -1,12 +1,9 @@
+import type { IFactory } from "@vault-of-ayes/factories/src/factory.interface.ts";
+import type { IFilesystemUtils } from "@vault-of-ayes/filesystem";
+import type { IPaths } from "@vault-of-ayes/paths";
+import { type Chalk, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
 import type { ICliConfig } from "./config.interface.ts";
-import type { Chalk } from "./externals.interface.ts";
-import {
-	voaMakeContentReplaceOperation,
-	voaMakePathReplaceOperation
-} from "./utils/factories";
-import type { IFilesystemUtils } from "./utils/filesystemUtils.interface.ts";
-import type { IPathUtils } from "./utils/pathUtils.interface.ts";
 
 @injectable()
 export class CliConfig implements ICliConfig {
@@ -16,21 +13,14 @@ export class CliConfig implements ICliConfig {
 	public readonly indentSize: ICliConfig["indentSize"] = 4;
 	public readonly encoding: ICliConfig["encoding"] = "utf-8";
 	public logLevel: ICliConfig["logLevel"] = "debug";
-	public templateFileContentReplaceOperations = [
-		voaMakeContentReplaceOperation("name", process.argv[2]),
-		voaMakeContentReplaceOperation("date", new Date().toDateString()),
-		voaMakeContentReplaceOperation("time", new Date().toTimeString())
-	];
-	public templateDirNameReplaceOperations = [
-		voaMakePathReplaceOperation("name", process.argv[2]),
-		voaMakePathReplaceOperation("date", new Date().toDateString()),
-		voaMakePathReplaceOperation("time", new Date().toTimeString())
-	];
+	public templateFileContentReplaceOperations: ICliConfig["templateFileContentReplaceOperations"];
+	public templateDirNameReplaceOperations: ICliConfig["templateDirNameReplaceOperations"];
 
 	constructor(
 		@inject("FileSystemUtils") private fs: IFilesystemUtils,
-		@inject("PathUtils") private pathUtils: IPathUtils,
-		@inject("Chalk") private chalk: Chalk
+		@inject("PathUtils") private pathUtils: IPaths,
+		@inject("Chalk") private chalk: Chalk,
+		@inject(TYPES.Factory) private factory: IFactory
 	) {
 		this.logLevels = [
 			{
@@ -43,6 +33,23 @@ export class CliConfig implements ICliConfig {
 			{ id: "warn", caption: "WARN", color: this.chalk.bgYellow },
 			{ id: "error", caption: "ERROR", color: this.chalk.bgRed },
 			{ id: "none", caption: "NONE", color: this.chalk.black }
+		];
+
+		this.templateFileContentReplaceOperations = [
+			factory.makeContentReplaceOperation("name", process.argv[2]),
+			factory.makeContentReplaceOperation(
+				"date",
+				new Date().toDateString()
+			),
+			factory.makeContentReplaceOperation(
+				"time",
+				new Date().toTimeString()
+			)
+		];
+		this.templateDirNameReplaceOperations = [
+			factory.makePathReplaceOperation("name", process.argv[2]),
+			factory.makePathReplaceOperation("date", new Date().toDateString()),
+			factory.makePathReplaceOperation("time", new Date().toTimeString())
 		];
 	}
 

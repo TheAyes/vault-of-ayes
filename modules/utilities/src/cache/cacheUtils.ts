@@ -1,6 +1,5 @@
+import { type ILogger, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { ILogger } from "../externals.interface.ts";
-import { TYPES } from "../types.ts";
 import type { ICacheUtils } from "./cacheUtils.interface.ts";
 
 type StoreEntry<T = unknown> = {

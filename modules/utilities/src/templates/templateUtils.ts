@@ -1,7 +1,6 @@
+import type { IFilesystemUtils } from "@vault-of-ayes/filesystem";
+import { type ILogger, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { ILogger } from "../externals.interface.ts";
-import { TYPES } from "../types.ts";
-import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
 import type { ITemplateUtils } from "./templateUtils.interface.ts";
 
 @injectable()

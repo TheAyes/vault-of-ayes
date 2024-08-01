@@ -1,4 +1,4 @@
-export interface IFunctionFactories {
+export interface IFactory {
 	getContentReplacePattern: (searchValue: string) => RegExp;
 	getPathNameReplacePattern: (searchValue: string) => RegExp;
 

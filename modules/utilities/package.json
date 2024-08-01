@@ -1,13 +1,12 @@
 {
-	"name": "@vault-of-ayes/paths",
-	"main": "src/paths.ts",
+	"name": "@vault-of-ayes/utilities",
 	"type": "module",
+	"main": "src/index.ts",
 	"dependencies": {
 		"@vault-of-ayes/shared": "workspace:*"
 	},
 	"peerDependencies": {
 		"inversify": "^6.0.2",
-		"reflect-metadata": "^0.2.2",
-		"@types/bun": "^1.1.6"
+		"reflect-metadata": "^0.2.2"
 	}
 }

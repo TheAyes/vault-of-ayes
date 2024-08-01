@@ -6,5 +6,6 @@ export const TYPES = {
 	Logger: Symbol.for("Logger"),
 	Chalk: Symbol.for("Chalk"),
 	Config: Symbol.for("Config"),
-	SyntaxUtils: Symbol.for("SyntaxUtils")
+	SyntaxUtils: Symbol.for("SyntaxUtils"),
+	Factory: Symbol.for("Factory")
 };

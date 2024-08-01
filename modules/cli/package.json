@@ -14,14 +14,14 @@
 		"voa": "dist/program.exe"
 	},
 	"dependencies": {
-		"bun": "^1.1.17",
 		"commander": "^12.0.0-1",
 		"chalk": "^5.3.0",
 		"memfs": "^4.8.2"
 	},
 	"devDependencies": {
-		"tsx": "^4.15.2",
-		"esbuild": "^0.21.5",
 		"@commander-js/extra-typings": "^12.0.0-1"
+	},
+	"peerDependencies": {
+		"bun": "^1.1.17"
 	}
 }

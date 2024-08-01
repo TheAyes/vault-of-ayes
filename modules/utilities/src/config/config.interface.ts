@@ -1,3 +1,4 @@
+import type { IFactory } from "@vault-of-ayes/factories";
 import type { ChalkInstance } from "chalk";
 
 export interface ICliConfig {
@@ -7,10 +8,11 @@ export interface ICliConfig {
 	templateExtension: string;
 	indentSize: number;
 	encoding: BufferEncoding;
-	readonly templateFileContentReplaceOperations: readonly ((
-		previousValue: string
-	) => string)[];
-	readonly templateDirNameReplaceOperations: readonly ((
-		previousValue: string
-	) => string)[];
+
+	readonly templateFileContentReplaceOperations: readonly ReturnType<
+		IFactory["makeContentReplaceOperation"]
+	>[];
+	readonly templateDirNameReplaceOperations: readonly ReturnType<
+		IFactory["makePathReplaceOperation"]
+	>[];
 }
