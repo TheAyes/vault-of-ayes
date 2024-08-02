@@ -15,6 +15,6 @@ export class TemplateUtils implements ITemplateUtils {
 			this.logger.debug(
 				`Trying to retrieve templates from ${directoryPath}`
 			);
-			return await this.fs.voaReadDir(directoryPath);
+			return await this.fs.readDir(directoryPath);
 		};
 }

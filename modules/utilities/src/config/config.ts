@@ -54,11 +54,11 @@ export class CliConfig implements ICliConfig {
 	}
 
 	public findVoaConfig = async () => {
-		const root = await this.fs.voaFindProjectRoot();
+		const root = await this.fs.findProjectRoot();
 		if (root) {
 			const voaConfigPath = this.pathUtils.join(root, "config.ts");
 
-			if (await this.fs.voaExists(voaConfigPath)) return voaConfigPath;
+			if (await this.fs.exists(voaConfigPath)) return voaConfigPath;
 		}
 		return undefined;
 	};
@@ -66,7 +66,7 @@ export class CliConfig implements ICliConfig {
 	/*public getVoaProjectConfig = async () => {
 		const voaConfigPath = await this.findVoaConfig();
 		if (voaConfigPath) {
-			return await this.fs.voaReadFile(voaConfigPath);
+			return await this.fs.readFile(voaConfigPath);
 		}
 
 		return {};

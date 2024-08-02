@@ -5,7 +5,7 @@ import { cliConfig } from "../config.js";
 import { voaCreateDir } from "../utils/filesystemUtils.js";
 import { voaLog } from "../utils/loggingUtils.js";
 import { voaJoin } from "../utils/pathUtils.js";
-import { voaFindProjectRoot } from "../utils/templateUtils.js";
+import { findProjectRoot } from "../utils/templateUtils.js";
 import {
 	applyFileNameReplacementOperations,
 	isFileOrDir,
@@ -18,7 +18,7 @@ const generateTemplateFiles = async (templatePath: string) => {
 	const options = program.opts();
 	voaLog(`Received Options: ${JSON.stringify(options, null, 4)}`);
 
-	const rootPath = await voaFindProjectRoot();
+	const rootPath = await findProjectRoot();
 	const templatesPath = voaJoin(rootPath, "./templates", templatePath);
 
 	const templateFiles = await retrieveTemplateFiles(templatesPath);

@@ -60,7 +60,7 @@ export class ProjectFactory implements IProjectFactory {
 		.action(async (projectPath) => {
 			const projectOptions = projects.opts();
 			projectPath = voaNormalize(projectPath);
-			const rootPath = await voaFindProjectRoot();
+			const rootPath = await findProjectRoot();
 
 			const templateFiles = await voaRetrieveTemplateFiles(
 				voaJoin(rootPath, "templates/project")

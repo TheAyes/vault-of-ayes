@@ -1,6 +1,7 @@
 import type { INodeFsPromises } from "@vault-of-ayes/shared";
 import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
+import type { ICache } from "../cache/cache.interface.ts";
 import type { IConsoleUtils } from "../console";
 import type { IPaths } from "../paths";
 import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
@@ -10,10 +11,11 @@ export class FilesystemUtils implements IFilesystemUtils {
 	constructor(
 		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
 		@inject(TYPES.ConsoleUtils) private consoleUtils: IConsoleUtils,
-		@inject(TYPES.PathUtils) private pathUtils: IPaths
+		@inject(TYPES.PathUtils) private pathUtils: IPaths,
+		@inject(TYPES.Cache) private cache: ICache
 	) {}
 
-	public voaMakeFile: IFilesystemUtils["voaMakeFile"] = async (
+	public makeFile: IFilesystemUtils["makeFile"] = async (
 		file,
 		content,
 		{ dry = false } = {}
@@ -25,27 +27,29 @@ export class FilesystemUtils implements IFilesystemUtils {
 		this.consoleUtils.log(`Trying to write file: ${file}`);
 		if (!dry) {
 			const dirName = this.pathUtils.dirname(file.toString());
-			await this.fs.mkdir(dirName, { recursive: true });
 
+			await this.fs.mkdir(dirName, { recursive: true });
 			await this.fs.writeFile(file, content, { encoding: "utf-8" });
 		}
 	};
 
-	public voaReadFile: IFilesystemUtils["voaReadFile"] = async (file) =>
-		await this.fs.readFile(file, { encoding: "utf-8" });
+	public readFile: IFilesystemUtils["readFile"] = async (file) => {
+		await this.cache.registerKey(file, () =>
+			this.fs.readFile(file, { encoding: "utf-8" })
+		);
 
-	voaMakeDir: IFilesystemUtils["voaMakeDir"] = async (
-		dir,
-		{ dry = false } = {}
-	) =>
+		return await this.cache.get(file);
+	};
+
+	makeDir: IFilesystemUtils["makeDir"] = async (dir, { dry = false } = {}) =>
 		this.consoleUtils.log(
 			`Create dir received properties:\n  dir: ${dir}\n  dry: ${dry}`
 		);
 
-	voaReadDir: IFilesystemUtils["voaReadDir"] = async (dir) =>
-		this.fs.readdir(dir);
+	readDir: IFilesystemUtils["readDir"] = async (dir) =>
+		await this.fs.readdir(dir);
 
-	voaFindProjectRoot: IFilesystemUtils["voaFindProjectRoot"] = async (
+	findProjectRoot: IFilesystemUtils["findProjectRoot"] = async (
 		startDir = "."
 	) => {
 		const maxDepth: number = 5;
@@ -57,7 +61,7 @@ export class FilesystemUtils implements IFilesystemUtils {
 					currentDir,
 					"package.json"
 				);
-				await this.voaAccess(packageJsonPath);
+				await this.access(packageJsonPath);
 				return currentDir;
 			} catch {
 				if (iterations > maxDepth) {
@@ -75,10 +79,8 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return result;
 	};
 
-	voaFindConfigPath: IFilesystemUtils["voaFindConfigPath"] = async (
-		startDir
-	) => {
-		const root = await this.voaFindProjectRoot(startDir);
+	findConfigPath: IFilesystemUtils["findConfigPath"] = async (startDir) => {
+		const root = await this.findProjectRoot(startDir);
 		if (!root) {
 			this.consoleUtils.error("Couldn't find project root.");
 			return;
@@ -86,32 +88,31 @@ export class FilesystemUtils implements IFilesystemUtils {
 
 		const voaConfigPath = this.pathUtils.join(root, "config.ts");
 
-		if (await this.voaExists(voaConfigPath)) return voaConfigPath;
+		if (await this.exists(voaConfigPath)) return voaConfigPath;
 		this.consoleUtils.error("Config file seems to not exist.");
 		return undefined;
 	};
 
-	voaLStat: IFilesystemUtils["voaLStat"] = (pathUrl) =>
-		this.fs.lstat(pathUrl);
+	lStat: IFilesystemUtils["lStat"] = (pathUrl) => this.fs.lstat(pathUrl);
 
-	voaIsFileOrDir: IFilesystemUtils["voaIsFileOrDir"] = async (pathUrl) => {
-		const templateLStat = await this.voaLStat(pathUrl);
+	isFileOrDir: IFilesystemUtils["isFileOrDir"] = async (pathUrl) => {
+		const templateLStat = await this.lStat(pathUrl);
 		const isFile = templateLStat.isFile();
 		const isDir = templateLStat.isDirectory();
 
 		return { isFile, isDir };
 	};
 
-	voaExists: IFilesystemUtils["voaExists"] = async (pathUrl) => {
+	exists: IFilesystemUtils["exists"] = async (pathUrl) => {
 		try {
 			const normalizedPath = this.pathUtils.normalize(pathUrl.toString());
-			await this.voaAccess(normalizedPath);
+			await this.access(normalizedPath);
 			return true;
 		} catch {
 			return false;
 		}
 	};
 
-	voaAccess: IFilesystemUtils["voaAccess"] = async (path, mode) =>
+	access: IFilesystemUtils["access"] = async (path, mode) =>
 		this.fs.access(path, mode);
 }

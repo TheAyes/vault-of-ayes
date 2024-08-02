@@ -40,8 +40,8 @@ introduced the circular dependency issue.
 The feature comprised two functions:
 
 ```typescript
-export const voaIsFileOrDir = async (filePath: string) => {
-	const templateLStat = await voaLStat(filePath);
+export const isFileOrDir = async (filePath: string) => {
+	const templateLStat = await lStat(filePath);
 	const isFile = templateLStat.isFile();
 	const isDir = templateLStat.isDirectory();
 
@@ -50,10 +50,10 @@ export const voaIsFileOrDir = async (filePath: string) => {
 ```
 
 ```typescript
-export const voaExists = async (pathUrl: VoaPathLike) => {
+export const exists = async (pathUrl: VoaPathLike) => {
 	try {
 		const normalizedPath = voaNormalize(pathUrl.toString());
-		await voaAccess(normalizedPath);
+		await access(normalizedPath);
 		return true;
 	} catch {
 		return false;

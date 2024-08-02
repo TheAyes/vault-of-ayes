@@ -1,30 +1,30 @@
 import type { Stats } from "node:fs";
 
 export interface IFilesystemUtils {
-	voaMakeFile(
+	makeFile(
 		file: string,
 		content: string,
 		options?: { dry?: boolean }
 	): Promise<void>;
 
-	voaReadFile(file: string): Promise<string>;
+	readFile(file: string): Promise<string>;
 
-	voaMakeDir(dir: string, options?: { dry?: boolean }): Promise<void>;
+	makeDir(dir: string, options?: { dry?: boolean }): Promise<void>;
 
-	voaReadDir(dir: string): Promise<string[]>;
+	readDir(dir: string): Promise<string[]>;
 
-	voaFindProjectRoot(startDir?: string): Promise<string | undefined>;
+	findProjectRoot(startDir?: string): Promise<string | undefined>;
 
-	voaFindConfigPath(startDir: string): Promise<string | undefined>;
+	findConfigPath(startDir: string): Promise<string | undefined>;
 
-	voaLStat(pathUrl: string): Promise<Stats>;
+	lStat(pathUrl: string): Promise<Stats>;
 
-	voaIsFileOrDir(pathUrl: string): Promise<{
+	isFileOrDir(pathUrl: string): Promise<{
 		isFile: boolean;
 		isDir: boolean;
 	}>;
 
-	voaExists(pathUrl: string): Promise<boolean>;
+	exists(pathUrl: string): Promise<boolean>;
 
-	voaAccess(path: string, mode?: number): Promise<void>;
+	access(path: string, mode?: number): Promise<void>;
 }
