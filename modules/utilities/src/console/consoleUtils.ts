@@ -2,10 +2,10 @@ import { type Chalk, type ILogger, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
 import type { ICliConfig } from "../config";
 import type { ISyntaxUtils } from "../syntaxHighlighting";
-import type { IConsoleUtils } from "./consoleUtils.interface.ts";
+import type { IConsole } from "./consoleUtils.interface.ts";
 
 @injectable()
-export class ConsoleUtils implements IConsoleUtils {
+export class ConsoleUtils implements IConsole {
 	/*public async start(
 		message: string,
 		func: () => void | Promise<void>
@@ -32,7 +32,7 @@ export class ConsoleUtils implements IConsoleUtils {
 		@inject(TYPES.Logger) private logger: ILogger,
 		@inject(TYPES.Config) private config: ICliConfig,
 		@inject(TYPES.Chalk) private chalk: Chalk,
-		@inject(TYPES.SyntaxUtils) private syntaxUtils: ISyntaxUtils
+		@inject(TYPES.SyntaxHighlighting) private syntaxUtils: ISyntaxUtils
 	) {}
 
 	public log(message: any) {

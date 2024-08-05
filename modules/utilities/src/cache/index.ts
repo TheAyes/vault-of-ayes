@@ -1,2 +1,2 @@
-export * from "./cacheUtils.ts";
-export type * from "./cacheUtils.interface.ts";
+export * from "./cache.ts";
+export type * from "./cache.interface.ts";

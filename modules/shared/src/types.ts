@@ -1,13 +1,17 @@
 export const TYPES = {
-	FileSystemUtils: Symbol.for("FileSystemUtils"),
+	FileSystem: Symbol.for("FileSystem"),
 	NodeFsPromises: Symbol.for("NodeFsPromises"),
-	ConsoleUtils: Symbol.for("ConsoleUtils"),
-	PathUtils: Symbol.for("PathUtils"),
+	Console: Symbol.for("Console"),
+	Paths: Symbol.for("Paths"),
 	Logger: Symbol.for("Logger"),
 	Chalk: Symbol.for("Chalk"),
 	Config: Symbol.for("Config"),
-	SyntaxUtils: Symbol.for("SyntaxUtils"),
+	SyntaxHighlighting: Symbol.for("SyntaxHighlighting"),
 	Factory: Symbol.for("Factory"),
 	Cache: Symbol.for("Cache"),
-	CacheItem: Symbol.for("CacheItem")
+	CacheItem: Symbol.for("CacheItem"),
+	Command: Symbol.for("Command"),
+	Templates: Symbol.for("Templates"),
+	ProjectFactory: Symbol.for("ProjectFactory"),
+	Program: Symbol.for("Program")
 };

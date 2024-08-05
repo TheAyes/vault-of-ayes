@@ -2,6 +2,7 @@ import type { Command } from "@commander-js/extra-typings";
 import type chalk from "chalk";
 import console from "node:console";
 import fs from "node:fs";
+import * as path from "node:path";
 
 export interface ILogger {
 	debug: typeof console.debug;
@@ -24,6 +25,8 @@ export interface INodeFsPromises {
 	writeFile: typeof fs.promises.writeFile;
 }
 
+export type bigPath = typeof path;
+
 export type Chalk = typeof chalk;
 
-export type ICommand = typeof Command;
+export type CCommand = Command;

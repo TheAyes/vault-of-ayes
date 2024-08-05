@@ -1,4 +1,4 @@
-export interface IConsoleUtils {
+export interface IConsole {
 	/*
 		start: (message: string, func: () => void | Promise<void>) => Promise<void>;
 	*/

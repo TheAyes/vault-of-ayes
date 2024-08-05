@@ -1,55 +1,19 @@
-import { injectable } from "inversify";
+import { Command } from "@commander-js/extra-typings";
+import { TYPES } from "@vault-of-ayes/shared";
+import {
+	type IFilesystem,
+	type IPaths,
+	type ITemplateUtils,
+	utilityContainer
+} from "@vault-of-ayes/utilities";
 import { vol } from "memfs";
-import type { TCommand } from "../externals.interface.ts";
-import { voaFindProjectRoot } from "../utils/filesystemUtils";
-import { voaJoin, voaNormalize } from "../utils/pathUtils.js";
-import { voaRetrieveTemplateFiles } from "../utils/templateUtils.js";
-import type { IProjectFactory } from "./projects.interface.ts";
 
-@injectable()
-export class ProjectFactory implements IProjectFactory {
-	constructor(private projects: TCommand) {
-		// Add Command
-		this.projects
-			.command("add")
-			.argument(
-				"<project>",
-				"The path to your project. Relative from the root directory."
-			)
-			.action(async (projectPath) => {
-				const projectOptions = projects.opts();
-				projectPath = voaNormalize(projectPath);
-				const rootPath = await voaFindProjectRoot();
-
-				const templateFiles = await voaRetrieveTemplateFiles(
-					voaJoin(rootPath, "templates/project")
-				);
-
-				vol.fromJSON({}, rootPath);
-
-				console.log(templateFiles);
-
-				//templateFiles.forEach((currentFile, index) => {
-				//	//vol.mk;
-				//});
-			});
-
-		// Remove Command
-		this.projects
-			.command("remove")
-			.argument(
-				"<project>",
-				"The path to your project. Relative from the root directory."
-			)
-			.action(async (projectPath) => {
-				const projectOptions = projects.opts();
-				projectPath = voaNormalize(projectPath);
-			});
-	}
-}
-
-/*export const makeProjectCommand = () => {
+export const makeProjectManagementCommands = () => {
 	const projects = new Command("projects").option("--dry");
+
+	const fs = utilityContainer.get<IFilesystem>(TYPES.FileSystem);
+	const path = utilityContainer.get<IPaths>(TYPES.Paths);
+	const templates = utilityContainer.get<ITemplateUtils>(TYPES.Templates);
 
 	projects
 		.command("add")
@@ -59,11 +23,13 @@ export class ProjectFactory implements IProjectFactory {
 		)
 		.action(async (projectPath) => {
 			const projectOptions = projects.opts();
-			projectPath = voaNormalize(projectPath);
-			const rootPath = await findProjectRoot();
+			projectPath = path.normalize(projectPath);
+			const rootPath = await fs.findProjectRoot();
 
-			const templateFiles = await voaRetrieveTemplateFiles(
-				voaJoin(rootPath, "templates/project")
+			if (!rootPath) throw new Error();
+
+			const templateFiles = await templates.retrieveTemplateFiles(
+				path.join(rootPath, "templates/project")
 			);
 
 			vol.fromJSON({}, rootPath);
@@ -83,8 +49,8 @@ export class ProjectFactory implements IProjectFactory {
 		)
 		.action(async (projectPath) => {
 			const projectOptions = projects.opts();
-			projectPath = voaNormalize(projectPath);
+			projectPath = path.join(projectPath);
 		});
 
 	return projects;
-};*/
+};

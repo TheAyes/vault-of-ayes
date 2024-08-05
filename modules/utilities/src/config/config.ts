@@ -1,7 +1,7 @@
 import { type Chalk, TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
 import type { IFactory } from "../factory";
-import type { IFilesystemUtils } from "../filesystem";
+import type { IFilesystem } from "../filesystem";
 import type { IPaths } from "../paths";
 import type { ICliConfig } from "./config.interface.ts";
 
@@ -17,7 +17,7 @@ export class CliConfig implements ICliConfig {
 	public templateDirNameReplaceOperations: ICliConfig["templateDirNameReplaceOperations"];
 
 	constructor(
-		@inject("FileSystemUtils") private fs: IFilesystemUtils,
+		@inject("FileSystemUtils") private fs: IFilesystem,
 		@inject("PathUtils") private pathUtils: IPaths,
 		@inject("Chalk") private chalk: Chalk,
 		@inject(TYPES.Factory) private factory: IFactory

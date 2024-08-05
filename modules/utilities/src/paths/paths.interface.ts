@@ -7,7 +7,7 @@ export interface IPaths {
 	resolve: (...paths: string[]) => string;
 	basename: (path: string, ext?: string) => string;
 	delimiter: string;
-	extname: (path: string) => string;
+	extname: (pathString: string) => string;
 	format: (pathObject: FormatInputPathObject) => string;
 	isAbsolute: (path: string) => boolean;
 	parse: (pathString: string) => ParsedPath;

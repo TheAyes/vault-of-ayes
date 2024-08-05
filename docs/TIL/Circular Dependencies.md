@@ -27,11 +27,11 @@ manifested:
 ## Cause of the Circular Dependency
 
 My project consists of [paths.ts](../../modules/cli/src/utils/pathUtils.ts), a
-custom wrapper around Node's Path
+custom wrapper around Node's Paths
 class. The wrapper extends the functionality of the original class via logs and other
 additional functions. I have a
 similar wrapper, [
-`filesystemUtils.ts`](../../modules/cli/src/utils/filesystemUtils.ts), for the
+`filesystem.ts`](../../modules/cli/src/utils/filesystemUtils.ts), for the
 `node:fs/promises`
 class.
 
@@ -62,7 +62,7 @@ export const exists = async (pathUrl: VoaPathLike) => {
 ```
 
 The addition of these functions created a circular dependency as [
-`filesystemUtils.ts`](../../modules/cli/src/utils/filesystemUtils.ts) was already
+`filesystem.ts`](../../modules/cli/src/utils/filesystemUtils.ts) was already
 depending on [
 `paths.ts`](../../modules/cli/src/utils/pathUtils.ts).
 
@@ -80,7 +80,7 @@ configuration.
 By implementing the proposed solutions, I realized that all I needed to do was to
 move some of my code. Hence, I shifted
 some functions from [`paths.ts`](../../modules/cli/src/utils/pathUtils.ts) to [
-`filesystemUtils.ts`](../../modules/cli/src/utils/filesystemUtils.ts). This change
+`filesystem.ts`](../../modules/cli/src/utils/filesystemUtils.ts). This change
 successfully resolved the circular
 dependency issue.
 

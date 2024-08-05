@@ -1,2 +1,2 @@
-export * from "./filesystemUtils";
-export type * from "./filesystemUtils.interface";
+export * from "./filesystem.ts";
+export type * from "./filesystem.interface";

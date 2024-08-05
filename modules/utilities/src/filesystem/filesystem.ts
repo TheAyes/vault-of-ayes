@@ -1,21 +1,21 @@
 import type { INodeFsPromises } from "@vault-of-ayes/shared";
 import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { ICache } from "../cache/cache.interface.ts";
-import type { IConsoleUtils } from "../console";
+import type { ICache } from "../cache";
+import type { IConsole } from "../console";
 import type { IPaths } from "../paths";
-import type { IFilesystemUtils } from "./filesystemUtils.interface.ts";
+import type { IFilesystem } from "./filesystem.interface.ts";
 
 @injectable()
-export class FilesystemUtils implements IFilesystemUtils {
+export class Filesystem implements IFilesystem {
 	constructor(
 		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
-		@inject(TYPES.ConsoleUtils) private consoleUtils: IConsoleUtils,
-		@inject(TYPES.PathUtils) private pathUtils: IPaths,
+		@inject(TYPES.Console) private consoleUtils: IConsole,
+		@inject(TYPES.Paths) private pathUtils: IPaths,
 		@inject(TYPES.Cache) private cache: ICache
 	) {}
 
-	public makeFile: IFilesystemUtils["makeFile"] = async (
+	public makeFile: IFilesystem["makeFile"] = async (
 		file,
 		content,
 		{ dry = false } = {}
@@ -33,29 +33,29 @@ export class FilesystemUtils implements IFilesystemUtils {
 		}
 	};
 
-	public readFile: IFilesystemUtils["readFile"] = async (file) => {
-		await this.cache.registerKey(file, () =>
-			this.fs.readFile(file, { encoding: "utf-8" })
+	public readFile: IFilesystem["readFile"] = async (file) => {
+		return await this.cache.get(
+			file,
+			async () => await this.fs.readFile(file, { encoding: "utf-8" })
 		);
-
-		return await this.cache.get(file);
 	};
 
-	makeDir: IFilesystemUtils["makeDir"] = async (dir, { dry = false } = {}) =>
+	makeDir: IFilesystem["makeDir"] = async (dir, { dry = false } = {}) =>
 		this.consoleUtils.log(
 			`Create dir received properties:\n  dir: ${dir}\n  dry: ${dry}`
 		);
 
-	readDir: IFilesystemUtils["readDir"] = async (dir) =>
-		await this.fs.readdir(dir);
+	readDir: IFilesystem["readDir"] = async (dir) => await this.fs.readdir(dir);
 
-	findProjectRoot: IFilesystemUtils["findProjectRoot"] = async (
+	findProjectRoot: IFilesystem["findProjectRoot"] = async (
 		startDir = "."
 	) => {
 		const maxDepth: number = 5;
 		let iterations = 0;
 
-		const recursiveSearch = async (currentDir: string): Promise<string> => {
+		const recursiveSearch = async (
+			currentDir: string
+		): Promise<string | undefined> => {
 			try {
 				const packageJsonPath = this.pathUtils.join(
 					currentDir,
@@ -65,7 +65,7 @@ export class FilesystemUtils implements IFilesystemUtils {
 				return currentDir;
 			} catch {
 				if (iterations > maxDepth) {
-					return "";
+					return undefined;
 				} else {
 					iterations++;
 
@@ -79,7 +79,7 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return result;
 	};
 
-	findConfigPath: IFilesystemUtils["findConfigPath"] = async (startDir) => {
+	findConfigPath: IFilesystem["findConfigPath"] = async (startDir) => {
 		const root = await this.findProjectRoot(startDir);
 		if (!root) {
 			this.consoleUtils.error("Couldn't find project root.");
@@ -93,9 +93,9 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return undefined;
 	};
 
-	lStat: IFilesystemUtils["lStat"] = (pathUrl) => this.fs.lstat(pathUrl);
+	lStat: IFilesystem["lStat"] = (pathUrl) => this.fs.lstat(pathUrl);
 
-	isFileOrDir: IFilesystemUtils["isFileOrDir"] = async (pathUrl) => {
+	isFileOrDir: IFilesystem["isFileOrDir"] = async (pathUrl) => {
 		const templateLStat = await this.lStat(pathUrl);
 		const isFile = templateLStat.isFile();
 		const isDir = templateLStat.isDirectory();
@@ -103,7 +103,7 @@ export class FilesystemUtils implements IFilesystemUtils {
 		return { isFile, isDir };
 	};
 
-	exists: IFilesystemUtils["exists"] = async (pathUrl) => {
+	exists: IFilesystem["exists"] = async (pathUrl) => {
 		try {
 			const normalizedPath = this.pathUtils.normalize(pathUrl.toString());
 			await this.access(normalizedPath);
@@ -113,6 +113,6 @@ export class FilesystemUtils implements IFilesystemUtils {
 		}
 	};
 
-	access: IFilesystemUtils["access"] = async (path, mode) =>
+	access: IFilesystem["access"] = async (path, mode) =>
 		this.fs.access(path, mode);
 }

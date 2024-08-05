@@ -3,8 +3,7 @@
 // TODO: Can we apply dependency injection here?
 
 import { Command } from "@commander-js/extra-typings";
-import { makeProjectCommand } from "./commands/projects";
-import "reflect-metadata";
+import { makeProjectManagementCommands } from "./commands/projects.ts";
 
 export const voaProgram = new Command();
 
@@ -20,6 +19,4 @@ voaProgram.configureOutput({
 
 voaProgram.option("--verbose");
 
-voaProgram.addCommand(makeProjectCommand());
-
-voaProgram.parse(process.argv);
+voaProgram.addCommand(makeProjectManagementCommands());

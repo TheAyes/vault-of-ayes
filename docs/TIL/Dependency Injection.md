@@ -47,7 +47,7 @@ InversifyJS to handle DI.
 @injectable()
 export class Config implements ICliConfig {
 	/* ... code omitted for brevity ... */
-	constructor(@inject("FileSystemUtils") private fs: IFilesystemUtils) {
+	constructor(@inject("FileSystem") private fs: IFilesystem) {
 	}
 
 	/* ... code omitted for brevity ... */
@@ -55,10 +55,10 @@ export class Config implements ICliConfig {
 ```
 
 In the above code, the @injectable() decorator is used to declare that Config is a
-class into which dependencies can be injected. The @inject("FileSystemUtils")
-decorator passes the IFilesystemUtils instance to the constructor parameter fs. In
+class into which dependencies can be injected. The @inject("FileSystem")
+decorator passes the IFilesystem instance to the constructor parameter fs. In
 other words, the Config class doesn't need to create an instance of
-FileSystemUtils. It is supplied (injected) with an instance when it is instantiated.
+FileSystem. It is supplied (injected) with an instance when it is instantiated.
 
 ## Summary
 

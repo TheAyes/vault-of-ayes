@@ -1,6 +1,6 @@
 import type { Stats } from "node:fs";
 
-export interface IFilesystemUtils {
+export interface IFilesystem {
 	makeFile(
 		file: string,
 		content: string,

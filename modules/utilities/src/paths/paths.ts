@@ -1,72 +1,72 @@
+import { TYPES } from "@vault-of-ayes/shared";
 import { inject, injectable } from "inversify";
-import type { IConsoleUtils } from "../console";
+import type * as pathModule from "node:path";
+import type { IConsole } from "../console";
 
 import type { IPaths } from "./paths.interface.ts";
 
 @injectable()
 export class Paths implements IPaths {
 	constructor(
-		@inject("PathUtils") private path: IPaths,
-		@inject("ConsoleUtils") private consoleUtils: IConsoleUtils
+		@inject(TYPES.Paths) private path: typeof pathModule,
+		@inject(TYPES.Console) private logger: IConsole
 	) {}
 
-	// native path methods
-	get basename() {
-		return this.path.basename;
+	get sep() {
+		return this.path.sep;
 	}
 
 	get delimiter() {
 		return this.path.delimiter;
 	}
 
-	get extname() {
-		return this.path.extname;
-	}
+	public format: IPaths["format"] = (pathObject) =>
+		this.path.format(pathObject);
 
-	get format() {
-		return this.path.format;
-	}
+	public extname: IPaths["extname"] = (pathString) =>
+		this.path.extname(pathString);
 
-	get isAbsolute() {
-		return this.path.isAbsolute;
-	}
+	// native path methods
+	public basename: IPaths["basename"] = (pathString, extension) =>
+		this.path.basename(pathString, extension);
 
-	get parse() {
-		return this.path.parse;
-	}
+	public parse: IPaths["parse"] = (pathString) => {
+		return this.path.parse(pathString);
+	};
 
-	get sep() {
-		return this.path.sep;
-	}
+	public isAbsolute: IPaths["isAbsolute"] = (pathString) => {
+		return this.path.isAbsolute(pathString);
+	};
 
-	normalize(pathUrl: string) {
-		let result = this.path.normalize(pathUrl);
-		this.consoleUtils.log(`Normalized path:\n${pathUrl} -> ${result}`);
+	public normalize: IPaths["normalize"] = (pathUrl) => {
+		let result = this.normalize(pathUrl);
+		this.logger.log(`Normalized path:\n${pathUrl} -> ${result}`);
 
 		if (process.platform === "win32") {
 			if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
 		}
+
 		if (process.platform !== "win32") result = result.replace(/[A-Z]:/, "");
 
 		return result;
-	}
+	};
 
-	join(...paths: string[]) {
-		this.consoleUtils.log(`Joining paths: ${paths}`);
+	public join: IPaths["join"] = (...paths) => {
+		this.logger.log(`Joining paths: ${paths}`);
 
 		const result: string = this.path.join(...paths);
-		this.consoleUtils.log(`Paths joined: ${result}`);
+		this.logger.log(`Paths joined: ${result}`);
 
 		return this.normalize(result);
-	}
+	};
 
-	dirname(pathUrl: string) {
+	public dirname: IPaths["dirname"] = (pathUrl) => {
 		return this.path.dirname(pathUrl);
-	}
+	};
 
-	resolve(...paths: string[]) {
+	public resolve: IPaths["resolve"] = (...paths) => {
 		return this.path.resolve(...paths);
-	}
+	};
 }
 
 export type { IPaths };

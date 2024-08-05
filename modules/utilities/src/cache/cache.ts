@@ -27,29 +27,30 @@ export class Cache implements ICache {
 
 	constructor(@inject(TYPES.Logger) private logger: ILogger) {}
 
-	public registerKey: ICache["registerKey"] = async (
-		key,
-		resolver,
-		timeToLiveSecs = 60
-	) => {
-		if (this.has(key)) return;
-
-		this.store.set(key, {
-			current: await resolver(),
-			resolver: resolver,
-			expires: this.generateExpiry(timeToLiveSecs),
-			ttl: timeToLiveSecs
-		});
+	static generateExpiry = (ttl: number) => {
+		const expires = new Date();
+		expires.setSeconds(expires.getSeconds() + ttl);
+		return expires;
 	};
 
-	public get: ICache["get"] = async <T = unknown>(key: PropertyKey) => {
-		this.throwIfNotExist(key);
+	public get: ICache["get"] = async <T = unknown>(
+		key: PropertyKey,
+		resolver?: <T extends unknown>() => Promise<T>,
+		ttl: number = 60
+	): Promise<T> => {
+		if (!this.has(key)) {
+			if (!resolver)
+				throw new Error(
+					"It has been tried to access an uninitialized key, yet there was no resolver function specified."
+				);
+			await this.registerKey(key, resolver, ttl);
+		}
 
 		let storeItem = this.store.get(key)!;
 		let current = storeItem.current;
 
-		if (storeItem.expires <= new Date() || current === null) {
-			const expiry = this.generateExpiry(storeItem.ttl);
+		if (storeItem.expires <= new Date() || current === undefined) {
+			const expiry = Cache.generateExpiry(storeItem.ttl);
 			current = await storeItem.resolver();
 
 			storeItem = {
@@ -58,7 +59,7 @@ export class Cache implements ICache {
 				expires: expiry
 			};
 			this.store.set(key, storeItem);
-			this.logger.log(`Refreshed cached store entry. Expires: ${expiry}`);
+			this.logger.log(`New cache store item created. Expires: ${expiry}`);
 		}
 
 		return current as T;
@@ -85,10 +86,19 @@ export class Cache implements ICache {
 		return result;
 	};
 
-	private generateExpiry = (ttl: number) => {
-		const expires = new Date();
-		expires.setSeconds(expires.getSeconds() + ttl);
-		return expires;
+	private registerKey = async (
+		key: PropertyKey,
+		resolver: <T = unknown>() => Promise<T>,
+		timeToLiveSecs = 60
+	) => {
+		if (this.has(key)) return;
+
+		this.store.set(key, {
+			current: await resolver(),
+			resolver: resolver,
+			expires: Cache.generateExpiry(timeToLiveSecs),
+			ttl: timeToLiveSecs
+		});
 	};
 
 	private throwIfNotExist = (key: PropertyKey) => {
