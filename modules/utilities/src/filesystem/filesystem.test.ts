@@ -1,7 +1,5 @@
 import {type fs, vol} from "memfs";
 import {afterEach, describe, expect, test, vi} from "vitest";
-import {type VoaPathLike, type VoaWriteFileOptions} from "../types";
-import {voaReadFile, voaWriteFile} from "./filesystemUtils";
 
 
 vi.mock("node:fs/promises", async () => {

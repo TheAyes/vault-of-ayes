@@ -1,4 +1,4 @@
-import { injectable } from "tsyringe";
+import { injectable } from "inversify";
 import type { IFactory } from "./factory.interface.ts";
 
 @injectable()

@@ -6,7 +6,6 @@
 		"@vault-of-ayes/shared": "workspace:*"
 	},
 	"peerDependencies": {
-		"tsyringe": "^4.8.0",
-		"reflect-metadata": "^0.2.2"
+		"inversify": "^6.0.2"
 	}
 }

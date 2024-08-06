@@ -1,5 +1,5 @@
 import { type TChalk, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "tsyringe";
+import { inject, injectable } from "inversify";
 
 import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 

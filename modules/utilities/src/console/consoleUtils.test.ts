@@ -1,8 +1,12 @@
+import {TYPES} from "@vault-of-ayes/shared";
 import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
+import {Cache} from "../cache";
+import {CliConfig, type ICliConfig} from "../config";
+import {utilityContainer} from "../index";
 
 vi.mock("../config.js");
 
-const setLogLevel = (level: typeof cliConfig.logLevel) => {
+const setLogLevel = (level: ICliConfig["logLevel"]) => {
 	cliConfig.logLevel = level;
 };
 
@@ -22,9 +26,9 @@ describe("Logger functions tests", () => {
 
 	describe("shouldLog function tests", () => {
 		test("Given verbosity setting and verboseOnly flag, When shouldLog is called, Then it returns whether to log based on verbosity", () => {
+			const cliConfig = utilityContainer.resolve<ICliConfig>(TYPES.Config);
 			setLogLevel("info");
-			cliConfig.verbose = true;
-			const resultVerboseTrue = shouldLog(optionsFactory("info", true));
+			const resultVerboseTrue = cliConfig.shouldLog(optionsFactory("info", true));
 			expect(resultVerboseTrue).toBe(true);
 			cliConfig.verbose = false;
 			const resultVerboseFalse = shouldLog(optionsFactory("info", true));

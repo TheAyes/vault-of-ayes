@@ -1,9 +1,9 @@
 import { TYPES } from "@vault-of-ayes/shared";
 import chalk from "chalk";
+import { Container } from "inversify";
 import console from "node:console";
 import fs from "node:fs";
 import * as path from "node:path";
-import { container, type DependencyContainer } from "tsyringe";
 import { Cache } from "./cache";
 import { CliConfig } from "./config";
 import { ConsoleUtils } from "./console";
@@ -23,42 +23,41 @@ export * from "./paths";
 export * from "./syntaxHighlighting";
 export * from "./templates";
 
-export const utilityContainer = container.createChildContainer();
+export const utilityContainer = new Container();
 
 type Registrations = {
-	type: "register" | "registerInstance" | "registerSingleton";
+	type: "bind" | "bindInstance" | "bindSingleton";
 	identifier: symbol;
 	value?: any;
 	impl?: any;
 }[];
 
 const registerDependencies = (
-	forContainer: DependencyContainer,
+	forContainer: Container,
 	registrations: Registrations
 ) => {
 	registrations.forEach((registration) => {
 		switch (registration.type) {
-			case "register":
+			case "bind":
 				if (registration.impl) {
-					forContainer.register(registration.identifier, {
-						useClass: registration.impl
-					});
+					forContainer
+						.bind(registration.identifier)
+						.to(registration.impl);
 				}
 				break;
-			case "registerInstance":
+			case "bindInstance":
 				if (registration.value) {
-					forContainer.registerInstance(
-						registration.identifier,
-						registration.value
-					);
+					forContainer
+						.bind(registration.identifier)
+						.toConstantValue(registration.value);
 				}
 				break;
-			case "registerSingleton":
+			case "bindSingleton":
 				if (registration.impl) {
-					forContainer.registerSingleton(
-						registration.identifier,
-						registration.impl
-					);
+					forContainer
+						.bind(registration.identifier)
+						.to(registration.impl)
+						.inSingletonScope();
 				}
 				break;
 			default:
@@ -70,24 +69,24 @@ const registerDependencies = (
 };
 
 registerDependencies(utilityContainer, [
-	{ type: "register", identifier: TYPES.FileSystem, impl: Filesystem },
-	{ type: "register", identifier: TYPES.Console, impl: ConsoleUtils },
-	{ type: "register", identifier: TYPES.Paths, impl: Paths },
+	{ type: "bind", identifier: TYPES.FileSystem, impl: Filesystem },
+	{ type: "bind", identifier: TYPES.Console, impl: ConsoleUtils },
+	{ type: "bind", identifier: TYPES.Paths, impl: Paths },
 	{
-		type: "register",
+		type: "bind",
 		identifier: TYPES.SyntaxHighlighting,
 		impl: SyntaxUtils
 	},
-	{ type: "register", identifier: TYPES.Factory, impl: Factory },
-	{ type: "register", identifier: TYPES.Templates, impl: TemplateUtils },
-	{ type: "register", identifier: TYPES.Cache, impl: Cache },
-	{ type: "registerInstance", identifier: TYPES.Logger, value: console },
-	{ type: "registerInstance", identifier: TYPES.Chalk, value: chalk },
-	{ type: "registerInstance", identifier: TYPES.NodePath, value: path },
+	{ type: "bind", identifier: TYPES.Factory, impl: Factory },
+	{ type: "bind", identifier: TYPES.Templates, impl: TemplateUtils },
+	{ type: "bind", identifier: TYPES.Cache, impl: Cache },
+	{ type: "bindInstance", identifier: TYPES.Logger, value: console },
+	{ type: "bindInstance", identifier: TYPES.Chalk, value: chalk },
+	{ type: "bindInstance", identifier: TYPES.NodePath, value: path },
 	{
-		type: "registerInstance",
+		type: "bindInstance",
 		identifier: TYPES.NodeFsPromises,
 		value: fs.promises
 	},
-	{ type: "registerSingleton", identifier: TYPES.Config, impl: CliConfig }
+	{ type: "bindSingleton", identifier: TYPES.Config, impl: CliConfig }
 ]);

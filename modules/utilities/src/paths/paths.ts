@@ -1,5 +1,5 @@
 import { type TNodePath, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "tsyringe";
+import { inject, injectable } from "inversify";
 import type { IConsole } from "../console";
 
 import type { IPaths } from "./paths.interface.ts";

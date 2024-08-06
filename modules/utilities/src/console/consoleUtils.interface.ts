@@ -1,9 +1,10 @@
-export interface IConsole {
+import type { ILogger } from "@vault-of-ayes/shared";
+import type { ICliConfig } from "../config";
+
+export interface IConsole extends ILogger {
 	/*
 		start: (message: string, func: () => void | Promise<void>) => Promise<void>;
 	*/
-	log: (message: any) => void;
-	info: (message: any) => void;
-	warn: (message: any) => void;
-	error: (message: any) => void;
+
+	shouldLog: (logLevel: ICliConfig["logLevels"][number]["id"]) => boolean;
 }

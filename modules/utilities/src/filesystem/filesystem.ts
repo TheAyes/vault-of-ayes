@@ -1,6 +1,6 @@
 import type { INodeFsPromises } from "@vault-of-ayes/shared";
 import { TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "tsyringe";
+import { inject, injectable } from "inversify";
 import type { ICache } from "../cache";
 import type { IConsole } from "../console";
 import type { IPaths } from "../paths";

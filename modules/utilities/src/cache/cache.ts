@@ -1,5 +1,5 @@
 import { TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "tsyringe";
+import { inject, injectable } from "inversify";
 import type { IConsole } from "../console";
 import type { ICache, ICacheItem } from "./cache.interface.ts";
 

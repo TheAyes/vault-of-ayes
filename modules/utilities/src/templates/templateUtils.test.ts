@@ -1,5 +1,4 @@
 import { describe, test, expect, vi, beforeAll, afterEach } from "vitest";
-import { voaRetrieveTemplateFiles } from "./templateUtils";
 import {type fs, vol} from "memfs";
 
 
@@ -21,7 +20,7 @@ describe.skip("voaRetrieveTemplateFiles function", () => {
 			"templates": {
 				"exampleTemplate": ""
 			}
-		})
+		});
 
 		const directoryPath = "./template";
 		const result = await voaRetrieveTemplateFiles(directoryPath);

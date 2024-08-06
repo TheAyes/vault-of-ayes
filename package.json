@@ -1,20 +1,20 @@
 {
-	"name": "@vault-of-ayes/root",
-	"author": "Justin 'Ayes' Schildt",
-	"repository": "",
-	"workspaces": [
-		"modules/*"
-	],
-	"dependencies": {
-		"tsyringe": "^4.8.0",
-		"reflect-metadata": "^0.2.2"
-	},
-	"devDependencies": {
-		"@types/bun": "^1.1.6",
-		"@vitest/coverage-v8": "^1.6.0",
-		"@vitest/ui": "^1.6.0",
-		"prettier": "latest",
-		"typescript": "^5.5.4",
-		"vitest": "^2.0.5"
-	}
+  "name": "@vault-of-ayes/root",
+  "author": "Justin 'Ayes' Schildt",
+  "repository": "",
+  "workspaces": [
+    "modules/*"
+  ],
+  "dependencies": {
+    "inversify": "^6.0.2",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.6",
+    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
+    "prettier": "latest",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
 }
