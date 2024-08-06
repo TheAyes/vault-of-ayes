@@ -4,7 +4,7 @@ import type { IFactory } from "../factory";
 export interface ICliConfig {
 	readonly logLevels: { id: string; caption: string; color: ChalkInstance }[];
 	logLevel: "debug" | "log" | "info" | "warn" | "error" | "none";
-	findVoaConfig: () => Promise<string | undefined>;
+	/*findVoaConfig: () => Promise<string | undefined>;*/
 	templateExtension: string;
 	indentSize: number;
 	encoding: BufferEncoding;

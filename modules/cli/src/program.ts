@@ -17,6 +17,4 @@ voaProgram.configureOutput({
 		write(errorColor(str))
 });
 
-voaProgram.option("--verbose");
-
 voaProgram.addCommand(makeProjectManagementCommands());

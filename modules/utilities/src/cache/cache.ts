@@ -1,5 +1,6 @@
-import { type ILogger, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
+import { TYPES } from "@vault-of-ayes/shared";
+import { inject, injectable } from "tsyringe";
+import type { IConsole } from "../console";
 import type { ICache, ICacheItem } from "./cache.interface.ts";
 
 @injectable()
@@ -25,7 +26,7 @@ class CacheItem implements ICacheItem {
 export class Cache implements ICache {
 	private store = new Map<PropertyKey, ICacheItem>();
 
-	constructor(@inject(TYPES.Logger) private logger: ILogger) {}
+	constructor(@inject(TYPES.Console) private console: IConsole) {}
 
 	static generateExpiry = (ttl: number) => {
 		const expires = new Date();
@@ -35,7 +36,7 @@ export class Cache implements ICache {
 
 	public get: ICache["get"] = async <T = unknown>(
 		key: PropertyKey,
-		resolver?: <T extends unknown>() => Promise<T>,
+		resolver?: () => Promise<T>,
 		ttl: number = 60
 	): Promise<T> => {
 		if (!this.has(key)) {
@@ -43,7 +44,7 @@ export class Cache implements ICache {
 				throw new Error(
 					"It has been tried to access an uninitialized key, yet there was no resolver function specified."
 				);
-			await this.registerKey(key, resolver, ttl);
+			await this.registerKey<T>(key, resolver, ttl);
 		}
 
 		let storeItem = this.store.get(key)!;
@@ -59,7 +60,9 @@ export class Cache implements ICache {
 				expires: expiry
 			};
 			this.store.set(key, storeItem);
-			this.logger.log(`New cache store item created. Expires: ${expiry}`);
+			this.console.log(
+				`New cache store item created. Expires: ${expiry}`
+			);
 		}
 
 		return current as T;
@@ -86,9 +89,9 @@ export class Cache implements ICache {
 		return result;
 	};
 
-	private registerKey = async (
+	private registerKey = async <T = unknown>(
 		key: PropertyKey,
-		resolver: <T = unknown>() => Promise<T>,
+		resolver: () => Promise<T>,
 		timeToLiveSecs = 60
 	) => {
 		if (this.has(key)) return;

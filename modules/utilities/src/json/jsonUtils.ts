@@ -1,5 +1,5 @@
 import { TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
+import { inject, injectable } from "tsyringe";
 import type { ICliConfig } from "../config";
 
 import type { IJsonUtils } from "./jsonUtils.interface.ts";

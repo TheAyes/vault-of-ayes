@@ -1,5 +1,5 @@
-import { type Chalk, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
+import { type TChalk, TYPES } from "@vault-of-ayes/shared";
+import { inject, injectable } from "tsyringe";
 
 import type { ISyntaxUtils } from "./syntaxLoggingUtils.interface.ts";
 
@@ -9,7 +9,7 @@ export class SyntaxUtils implements ISyntaxUtils {
 		"\\[\\d{2}:\\d{2}:\\d{2}]";
 	public readonly syntaxMap;
 
-	constructor(@inject(TYPES.Chalk) private chalk: Chalk) {
+	constructor(@inject(TYPES.Chalk) private chalk: TChalk) {
 		this.syntaxMap = [
 			{
 				pattern: new RegExp(`${this.timePattern} (DEBUG)`),

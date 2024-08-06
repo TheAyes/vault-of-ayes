@@ -1,20 +1,17 @@
-import {
-	type Chalk,
-	type ILogger,
-	type INodeFsPromises,
-	TYPES
-} from "@vault-of-ayes/shared";
+import { TYPES } from "@vault-of-ayes/shared";
 import chalk from "chalk";
-import { Container } from "inversify";
 import console from "node:console";
 import fs from "node:fs";
-import { CliConfig, type ICliConfig } from "./config";
-import { ConsoleUtils, type IConsole } from "./console";
-import { Factory, type IFactory } from "./factory";
-import { Filesystem, type IFilesystem } from "./filesystem";
-import { type IPaths, Paths } from "./paths";
-import { type ISyntaxUtils, SyntaxUtils } from "./syntaxHighlighting";
-import { type ITemplateUtils, TemplateUtils } from "./templates";
+import * as path from "node:path";
+import { container, type DependencyContainer } from "tsyringe";
+import { Cache } from "./cache";
+import { CliConfig } from "./config";
+import { ConsoleUtils } from "./console";
+import { Factory } from "./factory";
+import { Filesystem } from "./filesystem";
+import { Paths } from "./paths";
+import { SyntaxUtils } from "./syntaxHighlighting";
+import { TemplateUtils } from "./templates";
 
 export * from "./cache";
 export * from "./config";
@@ -26,17 +23,71 @@ export * from "./paths";
 export * from "./syntaxHighlighting";
 export * from "./templates";
 
-export const utilityContainer = new Container();
+export const utilityContainer = container.createChildContainer();
 
-utilityContainer.bind<IFilesystem>(TYPES.FileSystem).to(Filesystem);
-utilityContainer
-	.bind<INodeFsPromises>(TYPES.NodeFsPromises)
-	.toConstantValue(fs.promises);
-utilityContainer.bind<IConsole>(TYPES.Console).to(ConsoleUtils);
-utilityContainer.bind<IPaths>(TYPES.Paths).to(Paths);
-utilityContainer.bind<ILogger>(TYPES.Logger).toConstantValue(console);
-utilityContainer.bind<Chalk>(TYPES.Chalk).toConstantValue(chalk);
-utilityContainer.bind<ICliConfig>(TYPES.Config).to(CliConfig);
-utilityContainer.bind<ISyntaxUtils>(TYPES.SyntaxHighlighting).to(SyntaxUtils);
-utilityContainer.bind<IFactory>(TYPES.Factory).to(Factory);
-utilityContainer.bind<ITemplateUtils>(TYPES.Templates).to(TemplateUtils);
+type Registrations = {
+	type: "register" | "registerInstance" | "registerSingleton";
+	identifier: symbol;
+	value?: any;
+	impl?: any;
+}[];
+
+const registerDependencies = (
+	forContainer: DependencyContainer,
+	registrations: Registrations
+) => {
+	registrations.forEach((registration) => {
+		switch (registration.type) {
+			case "register":
+				if (registration.impl) {
+					forContainer.register(registration.identifier, {
+						useClass: registration.impl
+					});
+				}
+				break;
+			case "registerInstance":
+				if (registration.value) {
+					forContainer.registerInstance(
+						registration.identifier,
+						registration.value
+					);
+				}
+				break;
+			case "registerSingleton":
+				if (registration.impl) {
+					forContainer.registerSingleton(
+						registration.identifier,
+						registration.impl
+					);
+				}
+				break;
+			default:
+				throw new Error(
+					`Unknown registration type: ${registration.type}`
+				);
+		}
+	});
+};
+
+registerDependencies(utilityContainer, [
+	{ type: "register", identifier: TYPES.FileSystem, impl: Filesystem },
+	{ type: "register", identifier: TYPES.Console, impl: ConsoleUtils },
+	{ type: "register", identifier: TYPES.Paths, impl: Paths },
+	{
+		type: "register",
+		identifier: TYPES.SyntaxHighlighting,
+		impl: SyntaxUtils
+	},
+	{ type: "register", identifier: TYPES.Factory, impl: Factory },
+	{ type: "register", identifier: TYPES.Templates, impl: TemplateUtils },
+	{ type: "register", identifier: TYPES.Cache, impl: Cache },
+	{ type: "registerInstance", identifier: TYPES.Logger, value: console },
+	{ type: "registerInstance", identifier: TYPES.Chalk, value: chalk },
+	{ type: "registerInstance", identifier: TYPES.NodePath, value: path },
+	{
+		type: "registerInstance",
+		identifier: TYPES.NodeFsPromises,
+		value: fs.promises
+	},
+	{ type: "registerSingleton", identifier: TYPES.Config, impl: CliConfig }
+]);

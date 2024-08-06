@@ -1,6 +1,6 @@
-import { type Chalk, type ILogger, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
-import type { ICliConfig } from "../config";
+import { type ILogger, type TChalk, TYPES } from "@vault-of-ayes/shared";
+import { inject, injectable } from "tsyringe";
+import { type ICliConfig } from "../config";
 import type { ISyntaxUtils } from "../syntaxHighlighting";
 import type { IConsole } from "./consoleUtils.interface.ts";
 
@@ -31,7 +31,7 @@ export class ConsoleUtils implements IConsole {
 	constructor(
 		@inject(TYPES.Logger) private logger: ILogger,
 		@inject(TYPES.Config) private config: ICliConfig,
-		@inject(TYPES.Chalk) private chalk: Chalk,
+		@inject(TYPES.Chalk) private chalk: TChalk,
 		@inject(TYPES.SyntaxHighlighting) private syntaxUtils: ISyntaxUtils
 	) {}
 
@@ -49,6 +49,21 @@ export class ConsoleUtils implements IConsole {
 
 	public error(message: any) {
 		this.baseLog(message, "error");
+	}
+
+	public shouldLog(
+		logLevel: ICliConfig["logLevels"][number]["id"] = "log"
+	): boolean {
+		// Exit early if global log level is set to "none"
+		if (this.config.logLevel === "none") return false;
+
+		// Introduce variable for index comparison to make the logic understandable
+		return (
+			this.config.logLevels.findIndex((value) => value.id === logLevel) >=
+			this.config.logLevels.findIndex(
+				(value) => value.id === this.config.logLevel
+			)
+		);
 	}
 
 	private baseLog(
@@ -76,21 +91,6 @@ export class ConsoleUtils implements IConsole {
 		this.logger[logLevel as keyof ILogger](
 			`${logLevelObject.caption}:`,
 			coloredMessage
-		);
-	}
-
-	private shouldLog(
-		logLevel: ICliConfig["logLevels"][number]["id"] = "log"
-	): boolean {
-		// Exit early if global log level is set to "none"
-		if (this.config.logLevel === "none") return false;
-
-		// Introduce variable for index comparison to make the logic understandable
-		return (
-			this.config.logLevels.findIndex((value) => value.id === logLevel) >=
-			this.config.logLevels.findIndex(
-				(value) => value.id === this.config.logLevel
-			)
 		);
 	}
 }

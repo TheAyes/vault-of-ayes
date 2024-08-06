@@ -1,11 +1,9 @@
-import { type Chalk, TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
+import { type TChalk, TYPES } from "@vault-of-ayes/shared";
+import { inject, singleton } from "tsyringe";
 import type { IFactory } from "../factory";
-import type { IFilesystem } from "../filesystem";
-import type { IPaths } from "../paths";
 import type { ICliConfig } from "./config.interface.ts";
 
-@injectable()
+@singleton()
 export class CliConfig implements ICliConfig {
 	public readonly logLevels: ICliConfig["logLevels"];
 	public readonly templateExtension: ICliConfig["templateExtension"] =
@@ -17,9 +15,7 @@ export class CliConfig implements ICliConfig {
 	public templateDirNameReplaceOperations: ICliConfig["templateDirNameReplaceOperations"];
 
 	constructor(
-		@inject("FileSystemUtils") private fs: IFilesystem,
-		@inject("PathUtils") private pathUtils: IPaths,
-		@inject("Chalk") private chalk: Chalk,
+		@inject(TYPES.Chalk) private chalk: TChalk,
 		@inject(TYPES.Factory) private factory: IFactory
 	) {
 		this.logLevels = [
@@ -36,39 +32,26 @@ export class CliConfig implements ICliConfig {
 		];
 
 		this.templateFileContentReplaceOperations = [
-			factory.makeContentReplaceOperation("name", process.argv[2]),
-			factory.makeContentReplaceOperation(
+			this.factory.makeContentReplaceOperation("name", process.argv[2]),
+			this.factory.makeContentReplaceOperation(
 				"date",
 				new Date().toDateString()
 			),
-			factory.makeContentReplaceOperation(
+			this.factory.makeContentReplaceOperation(
 				"time",
 				new Date().toTimeString()
 			)
 		];
 		this.templateDirNameReplaceOperations = [
-			factory.makePathReplaceOperation("name", process.argv[2]),
-			factory.makePathReplaceOperation("date", new Date().toDateString()),
-			factory.makePathReplaceOperation("time", new Date().toTimeString())
+			this.factory.makePathReplaceOperation("name", process.argv[2]),
+			this.factory.makePathReplaceOperation(
+				"date",
+				new Date().toDateString()
+			),
+			this.factory.makePathReplaceOperation(
+				"time",
+				new Date().toTimeString()
+			)
 		];
 	}
-
-	public findVoaConfig = async () => {
-		const root = await this.fs.findProjectRoot();
-		if (root) {
-			const voaConfigPath = this.pathUtils.join(root, "config.ts");
-
-			if (await this.fs.exists(voaConfigPath)) return voaConfigPath;
-		}
-		return undefined;
-	};
-
-	/*public getVoaProjectConfig = async () => {
-		const voaConfigPath = await this.findVoaConfig();
-		if (voaConfigPath) {
-			return await this.fs.readFile(voaConfigPath);
-		}
-
-		return {};
-	};*/
 }

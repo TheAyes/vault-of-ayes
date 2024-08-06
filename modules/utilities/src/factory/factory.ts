@@ -1,5 +1,7 @@
+import { injectable } from "tsyringe";
 import type { IFactory } from "./factory.interface.ts";
 
+@injectable()
 export class Factory implements IFactory {
 	public makeContentReplaceOperation: IFactory["makeContentReplaceOperation"] =
 		(searchString: string, value: string) => (previousValue: string) =>

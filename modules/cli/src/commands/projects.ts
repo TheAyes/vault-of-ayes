@@ -11,9 +11,9 @@ import { vol } from "memfs";
 export const makeProjectManagementCommands = () => {
 	const projects = new Command("projects").option("--dry");
 
-	const fs = utilityContainer.get<IFilesystem>(TYPES.FileSystem);
-	const path = utilityContainer.get<IPaths>(TYPES.Paths);
-	const templates = utilityContainer.get<ITemplateUtils>(TYPES.Templates);
+	const fs = utilityContainer.resolve<IFilesystem>(TYPES.FileSystem);
+	const path = utilityContainer.resolve<IPaths>(TYPES.Paths);
+	const templates = utilityContainer.resolve<ITemplateUtils>(TYPES.Templates);
 
 	projects
 		.command("add")

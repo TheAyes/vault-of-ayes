@@ -2,6 +2,7 @@ export const TYPES = {
 	FileSystem: Symbol.for("FileSystem"),
 	NodeFsPromises: Symbol.for("NodeFsPromises"),
 	Console: Symbol.for("Console"),
+	NodePath: Symbol.for("NodePath"),
 	Paths: Symbol.for("Paths"),
 	Logger: Symbol.for("Logger"),
 	Chalk: Symbol.for("Chalk"),

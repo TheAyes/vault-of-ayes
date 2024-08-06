@@ -1,6 +1,6 @@
 import type { INodeFsPromises } from "@vault-of-ayes/shared";
 import { TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
+import { inject, injectable } from "tsyringe";
 import type { ICache } from "../cache";
 import type { IConsole } from "../console";
 import type { IPaths } from "../paths";
@@ -9,10 +9,14 @@ import type { IFilesystem } from "./filesystem.interface.ts";
 @injectable()
 export class Filesystem implements IFilesystem {
 	constructor(
-		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
-		@inject(TYPES.Console) private consoleUtils: IConsole,
-		@inject(TYPES.Paths) private pathUtils: IPaths,
-		@inject(TYPES.Cache) private cache: ICache
+		@inject(TYPES.NodeFsPromises)
+		private fs: INodeFsPromises,
+		@inject(TYPES.Console)
+		private console: IConsole,
+		@inject(TYPES.Paths)
+		private pathUtils: IPaths,
+		@inject(TYPES.Cache)
+		private cache: ICache
 	) {}
 
 	public makeFile: IFilesystem["makeFile"] = async (
@@ -20,11 +24,11 @@ export class Filesystem implements IFilesystem {
 		content,
 		{ dry = false } = {}
 	) => {
-		this.consoleUtils.log(
+		this.console?.log(
 			`Write File received properties:\n  file: ${file}\n  content: ${content}\n  dry: ${dry}`
 		);
 
-		this.consoleUtils.log(`Trying to write file: ${file}`);
+		this.console?.log(`Trying to write file: ${file}`);
 		if (!dry) {
 			const dirName = this.pathUtils.dirname(file.toString());
 
@@ -41,7 +45,7 @@ export class Filesystem implements IFilesystem {
 	};
 
 	makeDir: IFilesystem["makeDir"] = async (dir, { dry = false } = {}) =>
-		this.consoleUtils.log(
+		this.console?.log(
 			`Create dir received properties:\n  dir: ${dir}\n  dry: ${dry}`
 		);
 
@@ -75,21 +79,21 @@ export class Filesystem implements IFilesystem {
 			}
 		};
 		const result = await recursiveSearch(startDir);
-		this.consoleUtils.info(`Found project root: ${result}`);
+		this.console?.info(`Found project root: ${result}`);
 		return result;
 	};
 
 	findConfigPath: IFilesystem["findConfigPath"] = async (startDir) => {
 		const root = await this.findProjectRoot(startDir);
 		if (!root) {
-			this.consoleUtils.error("Couldn't find project root.");
+			this.console?.error("Couldn't find project root.");
 			return;
 		}
 
 		const voaConfigPath = this.pathUtils.join(root, "config.ts");
 
 		if (await this.exists(voaConfigPath)) return voaConfigPath;
-		this.consoleUtils.error("Config file seems to not exist.");
+		this.console?.error("Config file seems to not exist.");
 		return undefined;
 	};
 

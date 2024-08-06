@@ -1,6 +1,5 @@
-import { TYPES } from "@vault-of-ayes/shared";
-import { inject, injectable } from "inversify";
-import type * as pathModule from "node:path";
+import { type TNodePath, TYPES } from "@vault-of-ayes/shared";
+import { inject, injectable } from "tsyringe";
 import type { IConsole } from "../console";
 
 import type { IPaths } from "./paths.interface.ts";
@@ -8,8 +7,8 @@ import type { IPaths } from "./paths.interface.ts";
 @injectable()
 export class Paths implements IPaths {
 	constructor(
-		@inject(TYPES.Paths) private path: typeof pathModule,
-		@inject(TYPES.Console) private logger: IConsole
+		@inject(TYPES.NodePath) private path: TNodePath,
+		@inject(TYPES.Console) private console: IConsole
 	) {}
 
 	get sep() {
@@ -40,7 +39,7 @@ export class Paths implements IPaths {
 
 	public normalize: IPaths["normalize"] = (pathUrl) => {
 		let result = this.normalize(pathUrl);
-		this.logger.log(`Normalized path:\n${pathUrl} -> ${result}`);
+		this.console.log(`Normalized path:\n${pathUrl} -> ${result}`);
 
 		if (process.platform === "win32") {
 			if (/^[\\\/]/.test(pathUrl)) result = `C:${result}`;
@@ -52,10 +51,10 @@ export class Paths implements IPaths {
 	};
 
 	public join: IPaths["join"] = (...paths) => {
-		this.logger.log(`Joining paths: ${paths}`);
+		this.console.log(`Joining paths: ${paths}`);
 
 		const result: string = this.path.join(...paths);
-		this.logger.log(`Paths joined: ${result}`);
+		this.console.log(`Paths joined: ${result}`);
 
 		return this.normalize(result);
 	};

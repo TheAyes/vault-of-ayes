@@ -1,7 +1,4 @@
 import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
-import {cliConfig} from "../config";
-import {VoaLogOptions} from "../types";
-import {shouldLog, voaLog} from "./consoleUtils";
 
 vi.mock("../config.js");
 
