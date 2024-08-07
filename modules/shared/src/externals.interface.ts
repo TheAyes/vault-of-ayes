@@ -11,13 +11,13 @@ export interface ILogger {
 	error: typeof console.error;
 }
 
-export interface INodeFsPromises {
-	access: typeof fs.promises.access;
+export type INodeFsPromises = typeof fs{
+	/*access: typeof fs.promises.access;
 	lstat: typeof fs.promises.lstat;
 	mkdir: typeof fs.promises.mkdir;
 	readdir: typeof fs.promises.readdir;
 	readFile: typeof fs.promises.readFile;
-	writeFile: typeof fs.promises.writeFile;
+	writeFile: typeof fs.promises.writeFile;*/
 }
 
 export type TChalk = typeof chalk;

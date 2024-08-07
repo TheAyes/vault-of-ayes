@@ -9,14 +9,10 @@ import type { IFilesystem } from "./filesystem.interface.ts";
 @injectable()
 export class Filesystem implements IFilesystem {
 	constructor(
-		@inject(TYPES.NodeFsPromises)
-		private fs: INodeFsPromises,
-		@inject(TYPES.Console)
-		private console: IConsole,
-		@inject(TYPES.Paths)
-		private pathUtils: IPaths,
-		@inject(TYPES.Cache)
-		private cache: ICache
+		@inject(TYPES.NodeFsPromises) private fs: INodeFsPromises,
+		@inject(TYPES.Console) private console: IConsole,
+		@inject(TYPES.Paths) private pathUtils: IPaths,
+		@inject(TYPES.Cache) private cache: ICache
 	) {}
 
 	public makeFile: IFilesystem["makeFile"] = async (
