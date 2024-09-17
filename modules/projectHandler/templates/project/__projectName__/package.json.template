@@ -1,0 +1,4 @@
+{
+	"name": "@vault-of-ayes/$projectName$",
+	"main": "src/main.ts"
+}

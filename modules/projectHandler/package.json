@@ -1,0 +1,7 @@
+{
+	"name": "@vault-of-ayes/project-handler",
+	"dependencies": {
+		"@vault-of-ayes/shared": "workspace:*",
+		"memfs": "^4.11.1"
+	}
+}
