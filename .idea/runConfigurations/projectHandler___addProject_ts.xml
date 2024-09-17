@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="projectHandler &gt; addProject.ts" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/modules/projectHandler/src/addProject.ts" working-dir="$PROJECT_DIR$/modules/projectHandler">
+    <method v="2" />
+  </configuration>
+</component>

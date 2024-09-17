@@ -1,4 +1,4 @@
-export const handle = async (promise: Promise<any>) => {
+export const handle = async <T>(promise: Promise<T>) => {
 	try {
 		return { value: await promise };
 	} catch (err: any) {

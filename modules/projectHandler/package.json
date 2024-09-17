@@ -1,7 +1,9 @@
 {
 	"name": "@vault-of-ayes/project-handler",
+	"main": "src/main.ts",
 	"dependencies": {
 		"@vault-of-ayes/shared": "workspace:*",
-		"memfs": "^4.11.1"
+		"memfs": "^4.11.1",
+		"simple-git": "^3.26.0"
 	}
 }
