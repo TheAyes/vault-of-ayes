@@ -5,6 +5,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/bismuth/src-tauri/target" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/bismuth/dist" />
       <excludePattern pattern="*.template" />
     </content>
     <orderEntry type="inheritedJdk" />

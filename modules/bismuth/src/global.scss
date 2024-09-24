@@ -1,0 +1,17 @@
+@import "fonts";
+@import "reset";
+
+@import "../public/themes/dark/theme";
+
+html {
+	color: $text-color;
+	background: $background-color;
+}
+
+body {
+	font-family: $font;
+}
+
+a {
+	color: $link-color;
+}

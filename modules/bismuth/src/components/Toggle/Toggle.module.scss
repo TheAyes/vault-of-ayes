@@ -1,0 +1,27 @@
+@import "../../../public/themes/dark/theme";
+
+.Toggle {
+	display: flex;
+	box-sizing: border-box;
+	width: 50px;
+	max-width: 100px;
+	padding: 3px;
+	border: 2px solid $text-color;
+	border-radius: 100vw;
+	background: none;
+
+	aspect-ratio: 2/1;
+
+	&[data-state="checked"] {
+		justify-content: end;
+	}
+
+	.ToggleThumb {
+		height: 100%;
+		border-radius: 100vw;
+		background: white;
+		aspect-ratio: 1/1;
+
+	}
+
+}
