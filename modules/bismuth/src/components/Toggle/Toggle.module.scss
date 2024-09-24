@@ -6,22 +6,34 @@
 	width: 50px;
 	max-width: 100px;
 	padding: 3px;
-	border: 2px solid $text-color;
+	transition: background-color 200ms;
+	border: 2px solid var(--text-color);
 	border-radius: 100vw;
+
 	background: none;
+
+	background: var(--error-color);
 
 	aspect-ratio: 2/1;
 
 	&[data-state="checked"] {
 		justify-content: end;
+		background: var(--success-color);
 	}
 
 	.ToggleThumb {
 		height: 100%;
+		margin: 0;
+		padding: 0;
 		border-radius: 100vw;
+
 		background: white;
 		aspect-ratio: 1/1;
 
+		& > svg {
+			width: 50px;
+			aspect-ratio: 1/1;
+		}
 	}
 
 }

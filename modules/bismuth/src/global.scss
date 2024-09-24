@@ -4,14 +4,14 @@
 @import "../public/themes/dark/theme";
 
 html {
-	color: $text-color;
-	background: $background-color;
+	color: var(--text-color);
+	background: var(--background-color);
 }
 
 body {
-	font-family: $font;
+	font-family: var(--font), sans-serif;
 }
 
 a {
-	color: $link-color;
+	color: var(--link-color);
 }

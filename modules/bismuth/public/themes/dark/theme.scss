@@ -1,6 +1,17 @@
-$font: "Poppins", "Arial", "Helvetica", sans-serif;
 
-$background-color: #121223;
-$text-color: #00eeee;
+:root {
 
-$link-color: #0088dd;
+	/* Palette */
+	--background-color: #121223;
+	--primary-color: #0088dd;
+
+	/* typography */
+	--font: "Poppins", "Arial", "Helvetica", sans-serif;
+	--text-color: #00eeee;
+	--link-color: #0088dd;
+
+	/* States */
+	--success-color: #009900;
+	--error-color: #cc0000;
+}
+
