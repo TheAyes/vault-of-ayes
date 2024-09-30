@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@emotion/react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -6,6 +7,7 @@ import { createRoot } from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 
 import "./global.scss";
+import { theme } from "./themes/themeDef.ts";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -23,7 +25,9 @@ if (!rootElement.innerHTML) {
 	const root = createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<RouterProvider router={router} />
+			<ThemeProvider theme={theme}>
+				<RouterProvider router={router} />
+			</ThemeProvider>
 		</StrictMode>
 	);
 }

@@ -1,5 +1,6 @@
-import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
+import type { DetailedHTMLProps, HTMLAttributes } from "react";
 
-export interface IToggle extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-	children?: ReactNode;
+export interface IToggle extends DetailedHTMLProps<HTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
+	label?: string;
+	toggled?: boolean;
 }
