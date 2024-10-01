@@ -1,6 +1,5 @@
-import type { DetailedHTMLProps, HTMLAttributes } from "react";
-
-export interface IToggle extends DetailedHTMLProps<HTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
+export interface IToggle {
 	label?: string;
 	toggled?: boolean;
+	variant?: "toggle" | "checkbox";
 }

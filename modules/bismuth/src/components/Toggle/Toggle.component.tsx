@@ -15,7 +15,7 @@ const offVariants = {
 	unchecked: { pathLength: 1 }
 };
 
-export const Toggle: FC<IToggle> = ({ label, toggled = false, ...props }) => {
+export const Toggle: FC<IToggle> = ({ label, toggled = false, variant = "toggle", ...props }) => {
 	const [isToggled, setToggled] = useState(toggled);
 	const onPathLength = useMotionValue(0);
 	const onOpacity = useTransform(onPathLength, [0.25, 0.75], [0, 1]);
@@ -24,57 +24,60 @@ export const Toggle: FC<IToggle> = ({ label, toggled = false, ...props }) => {
 	const offOpacity = useTransform(offPathLength, [0.25, 0.75], [0, 1]);
 
 	return (
-		<StyledToggle {...props}>
-			<motion.button
-				className={classNames({ toggled: isToggled })}
-				onClick={() => setToggled((prev) => !prev)}
-				initial={{ width: "30px" }}
-				animate={{
-					width: "50px",
-					transition: { delay: 0.5, type: "spring", damping: 30, stiffness: 700 }
-				}}
-				exit={{ aspectRatio: "1/1", width: "30px" }}
-				aria-checked={isToggled}
-			>
-				<motion.span
-					layout
-					initial={{ scale: 0 }}
-					animate={{ scale: 1, transition: { delay: 0.2 } }}
-					whileTap={"pressed"}
-					transition={{ type: "spring", damping: 30, stiffness: 700 }}
+		<StyledToggle autoFocus={false} {...props}>
+			{variant === "toggle" && (
+				<motion.button
+					className={classNames({ toggled: isToggled })}
+					onClick={() => setToggled((prev) => !prev)}
+					initial={{ width: "30px" }}
+					animate={{
+						width: "50px",
+						transition: { delay: 0.5, type: "spring", damping: 30, stiffness: 700 }
+					}}
+					exit={{ width: "30px" }}
+					whileTap={{ scale: 0.95 }}
+					aria-checked={isToggled}
 				>
-					<motion.svg
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						animate={isToggled ? "checked" : "unchecked"}
-						initial={true}
-						viewBox="0 0 100 100"
+					<motion.span
+						layout
+						initial={{ scale: 0 }}
+						animate={{ scale: 1, transition: { delay: 0.2 } }}
+						transition={{ type: "spring", damping: 30, stiffness: 700 }}
 					>
-						<motion.path
-							variants={checkmarkVariants}
-							fill="transparent"
-							strokeWidth="30"
-							width="200px"
-							height="200px"
-							d="M10 60 L40 90 L90 10"
-							style={{ pathLength: onPathLength, opacity: onOpacity }}
-							custom={isToggled}
-						/>
+						<motion.svg
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							animate={isToggled ? "checked" : "unchecked"}
+							initial={true}
+							viewBox="0 0 100 100"
+						>
+							<motion.path
+								variants={checkmarkVariants}
+								fill="transparent"
+								strokeWidth="30"
+								width="200px"
+								height="200px"
+								d="M10 60 L40 90 L90 10"
+								style={{ pathLength: onPathLength, opacity: onOpacity }}
+								custom={isToggled}
+							/>
+							{}
+							<motion.path
+								variants={offVariants}
+								fill="transparent"
+								strokeWidth="30"
+								width="200px"
+								height="200px"
+								d="m-30-30 160 160m0-160L-30 130"
+								style={{ pathLength: offPathLength, opacity: offOpacity }}
+								custom={isToggled}
+							/>
+						</motion.svg>
+					</motion.span>
+				</motion.button>
+			)}
 
-						<motion.path
-							variants={offVariants}
-							fill="transparent"
-							strokeWidth="30"
-							width="200px"
-							height="200px"
-							d="m-30-30 160 160m0-160L-30 130"
-							style={{ pathLength: offPathLength, opacity: offOpacity }}
-							custom={isToggled}
-						/>
-					</motion.svg>
-				</motion.span>
-			</motion.button>
-			{label != null && <p>{label}</p>}
+			{(label != null || label == "") && <p>{label}</p>}
 		</StyledToggle>
 	);
 };

@@ -1,14 +1,16 @@
 import { css, useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { TTheme } from "../../themes/themeDef.ts";
 import type { IToggle } from "./Toggle.root.ts";
 
-export const StyledToggle = styled("label")<Partial<IToggle>>(() => {
+export const StyledToggle = styled(motion.label)<Partial<IToggle>>(() => {
 	// @ts-ignore // Todo: Remove this if theme isn't used or is referenced.
 	const theme = useTheme() as TTheme;
 
 	return css({
-		display: "block",
+		display: "flex",
+		gap: "8px",
 
 		"& > button": {
 			display: "inline-flex",
@@ -49,8 +51,6 @@ export const StyledToggle = styled("label")<Partial<IToggle>>(() => {
 			}
 		},
 
-		"& > p": {
-			display: "inline-block"
-		}
+		"& > p": {}
 	});
 });
