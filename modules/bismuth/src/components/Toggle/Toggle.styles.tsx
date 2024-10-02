@@ -14,39 +14,57 @@ export const StyledToggle = styled(motion.label)<Partial<IToggle>>(() => {
 
 		"& > button": {
 			display: "inline-flex",
-			aspectRatio: "1.6/1",
 
-			height: "30px",
+			width: "3rem",
+			height: "3rem",
 			padding: "4px",
 
 			background: theme.colors.toggle.disabled,
 			border: `2px solid ${theme.colors.toggle.color}`,
-			borderRadius: theme.borderRadii.infinite,
+
+			borderRadius: theme.borderRadius.infinite,
 
 			transition: `background ${theme.transition.background.duration} ${
 				theme.transition.background.timingFunction ?? ""
 			}`,
 
-			"&.toggled": {
-				background: theme.colors.toggle.enabled,
-				justifyContent: "end"
-			},
-
 			"& > span": {
 				aspectRatio: "1/1",
-				height: "100%",
-				background: `${theme.colors.toggle.color}`,
-				borderRadius: "100%",
 				padding: 3,
+				height: "100%",
+				background: `${theme.colors.toggle.disabled}`,
+				borderRadius: "100%",
 
-				"& > svg > path": {
-					"&:nth-child(2)": {
-						stroke: theme.colors.toggle.disabled
-					},
+				transition: "background-color 200ms ease-in-out"
+			},
 
-					"&:nth-child(1)": {
+			"&.toggle": {
+				".offIcon": {
+					stroke: theme.colors.toggle.disabled
+				},
+
+				".onIcon": {
+					stroke: theme.colors.toggle.enabled
+				}
+			},
+
+			"&.checkbox": {
+				svg: {
+					"& > .onIcon": {
 						stroke: theme.colors.toggle.enabled
 					}
+				}
+			},
+
+			"&.toggled": {
+				background: theme.colors.toggle.enabled,
+
+				"&.toggle": {
+					justifyContent: "end"
+				},
+
+				"& > span": {
+					background: `${theme.colors.toggle.color}`
 				}
 			}
 		},

@@ -41,7 +41,7 @@ export type TTheme = {
 		};
 	};
 
-	borderRadii: {
+	borderRadius: {
 		small: CSSProperties["borderRadius"];
 		normal: CSSProperties["borderRadius"];
 		large: CSSProperties["borderRadius"];
@@ -88,7 +88,7 @@ export const theme: TTheme = {
 			enabled: "#0066aa"
 		}
 	},
-	borderRadii: {
+	borderRadius: {
 		small: 4,
 		normal: 8,
 		large: 14,
