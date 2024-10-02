@@ -1,25 +1,78 @@
 import { css, useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { TTheme } from "../../themes/themeDef.ts";
-import type { ICheckbox } from "./Checkbox.root.ts";
+import type { IToggle } from "./Checkbox.root.ts";
 
-export const StyledCheckbox = styled("label")<Partial<ICheckbox>>(() => {
+export const StyledToggle = styled(motion.label)<Partial<IToggle>>(() => {
 	// @ts-ignore // Todo: Remove this if theme isn't used or is referenced.
 	const theme = useTheme() as TTheme;
 
 	return css({
-		"& > button": {
-			aspectRatio: "1/1",
-			width: "2rem",
-			border: `2px solid ${theme.colors.toggle.color}`,
-			background: theme.colors.toggle.disabled,
-			borderRadius: "6px",
+		display: "flex",
+		gap: "8px",
 
-			"& > svg": {
-				overflow: "visible",
-				scale: 1.6,
-				stroke: theme.colors.toggle.color
+		"& > button": {
+			display: "inline-flex",
+
+			width: "3rem",
+			height: "3rem",
+			padding: "4px",
+
+			background: theme.colors.toggle.disabled,
+			border: `2px solid ${theme.colors.toggle.color}`,
+
+			borderRadius: theme.borderRadius.infinite,
+
+			transition: `background ${theme.transition.background.duration} ${
+				theme.transition.background.timingFunction ?? ""
+			}`,
+
+			"& > span": {
+				aspectRatio: "1/1",
+				padding: 3,
+				height: "100%",
+				borderRadius: "100%",
+
+				transition: "background-color 200ms ease-in-out"
+			},
+
+			"&.toggle": {
+				".offIcon": {
+					stroke: theme.colors.toggle.disabled
+				},
+
+				".onIcon": {
+					stroke: theme.colors.toggle.enabled
+				},
+
+				"& > span": {
+					background: `${theme.colors.toggle.color}`
+				}
+			},
+
+			"&.checkbox": {
+				svg: {
+					"& > .onIcon": {
+						stroke: theme.colors.toggle.enabled
+					}
+				}
+			},
+
+			"&.toggled": {
+				background: theme.colors.toggle.enabled,
+				justifyContent: "end",
+
+				"&.checkbox": {
+					background: `${theme.colors.toggle.disabled}`,
+
+					"& > span": {
+						background: `${theme.colors.toggle.color}`
+					}
+				}
 			}
-		}
+		},
+
+		"& > p": {}
 	});
 });

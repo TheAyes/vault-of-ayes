@@ -1,5 +1,6 @@
-import type { DetailedHTMLProps, HTMLAttributes } from "react";
-
-export interface ICheckbox extends DetailedHTMLProps<HTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
-	isChecked: boolean;
+export interface IToggle {
+	label?: string;
+	labelSide?: "left" | "right";
+	defaultState?: boolean;
+	variant?: "toggle" | "checkbox";
 }
