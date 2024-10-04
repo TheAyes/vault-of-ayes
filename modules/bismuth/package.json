@@ -14,7 +14,8 @@
 	},
 	"dependencies": {
 		"react": "^18.3.1",
-		"react-dom": "^18.3.1"
+		"react-dom": "^18.3.1",
+		"@react-buddy/ide-toolbox": "^2.4.0"
 	},
 	"devDependencies": {
 		"@ark-ui/react": "^3.12.1",

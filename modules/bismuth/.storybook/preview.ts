@@ -2,7 +2,7 @@ import { ThemeProvider } from "@emotion/react";
 import { withThemeFromJSXProvider } from "@storybook/addon-themes";
 import type { Preview, ReactRenderer } from "@storybook/react";
 import "../src/global.scss";
-import { theme } from "../src/themes/themeDef";
+import theme from "../src/themes/dark";
 
 const preview: Preview = {
 	decorators: [

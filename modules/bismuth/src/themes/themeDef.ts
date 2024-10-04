@@ -28,6 +28,22 @@ export type TTheme = {
 		error: CSSProperties["color"];
 		info: CSSProperties["color"];
 
+		component: {
+			primaryColor: CSSProperties["color"];
+			secondaryColor: CSSProperties["color"];
+			tertiaryColor: CSSProperties["color"];
+
+			primaryBackgroundColor: CSSProperties["backgroundColor"];
+			secondaryBackgroundColor: CSSProperties["backgroundColor"];
+			tertiaryBackgroundColor: CSSProperties["backgroundColor"];
+
+			border: {
+				color: CSSProperties["borderColor"];
+				width: CSSProperties["borderWidth"];
+				style: CSSProperties["borderStyle"];
+			};
+		};
+
 		button: {
 			color: CSSProperties["color"];
 			hoveredColor: CSSProperties["color"];
@@ -51,52 +67,4 @@ export type TTheme = {
 	transition: {
 		background: TTransition;
 	};
-};
-
-export const theme: TTheme = {
-	typography: {
-		fontFamily: "'Roboto', sans-serif",
-		fontSize: "16px",
-		fontWeightLight: 300,
-		fontWeightRegular: 400,
-		fontWeightMedium: 500,
-		fontWeightBold: 700
-	},
-	colors: {
-		primary: "#5544cc",
-		secondary: "#cc2020",
-
-		background: "#101032",
-		paper: "#212443",
-
-		separator: "303040",
-
-		success: "#00aa00",
-		error: "#ff0000",
-		info: "#9999ff",
-		warn: "#dada00",
-
-		button: {
-			color: "#aaaaff",
-			hoveredColor: "#000000",
-			activeColor: "#000000"
-		},
-
-		toggle: {
-			color: "#ccddff",
-			disabled: "#101032",
-			enabled: "#0066aa"
-		}
-	},
-	borderRadius: {
-		small: 4,
-		normal: 8,
-		large: 14,
-		infinite: Number.MAX_VALUE
-	},
-	transition: {
-		background: {
-			duration: "200ms"
-		}
-	}
 };
