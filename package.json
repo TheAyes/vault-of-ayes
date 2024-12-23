@@ -1,0 +1,17 @@
+{
+	"name": "vault-of-ayes",
+	"type": "module",
+	"workspaces": [
+		"modules/*"
+	],
+	"devDependencies": {
+		"@types/bun": "latest",
+		"prettier": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"astro-expressive-code": "^0.38.3"
+	}
+}
