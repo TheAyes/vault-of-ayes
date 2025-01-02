@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import HeaderLink from "./HeaderLink.astro";
+
+interface Props {
+	items?: Array<{
+		title: string,
+		target: HTMLAttributes<"a">["href"]
+	}>;
+}
+
+const { items } = Astro.props;
+---
+<style scoped>
+	menu {
+		display: flex;
+	}
+</style>
+
+<menu>
+	{
+		items && items.map((item) => (
+			<li>
+				<HeaderLink href={item.target}>{item.title}</HeaderLink>
+			</li>
+		))
+	}
+</menu>

@@ -10,15 +10,16 @@ html, body {
 
 html {
 	font-size: 62.5%;
-	background-color: #20202a;
+	background-color: var(--theme-background);
 }
 
 body {
+	font-family: sans-serif;
 	font-size: 2rem;
-	display: flex;
 
+	display: flex;
 	flex-direction: column;
-	color: #d0d0d0;
+	color: var(--theme-text);
 
 	& > * {
 		flex: 0;
@@ -27,6 +28,10 @@ body {
 	& > main {
 		flex-grow: 1;
 	}
+}
+
+ul, menu {
+	list-style: none;
 }
 
 img {

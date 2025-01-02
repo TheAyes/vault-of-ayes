@@ -1,6 +1,7 @@
 {
 	"name": "vault-of-ayes",
 	"type": "module",
+	"repository": "https://github.com/TheAyes/vault-of-ayes",
 	"workspaces": [
 		"modules/*"
 	],

@@ -1,15 +1,48 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 import { SITE_TITLE } from "../consts";
+import Navbar from "./Navbar.astro";
+
+const themePath = path.resolve("src/themes");
+const themeDir = await fs.readdir(themePath);
+const themeFiles = themeDir.filter(file => file.endsWith(".scss"));
+
+const themeOptions = themeFiles.map(file => {
+	// Remove the extension
+	return file.replace(".scss", "");
+});
 ---
 
 <header>
+	<script>
+		import { themeStore } from "../store";
+
+		const element = document.querySelector("select#theme-selector")!;
+
+		element.addEventListener("change", (event) => {
+			const select = event.currentTarget as HTMLSelectElement;
+
+			themeStore.set(select.value as string);
+		});
+
+	</script>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
+		<Navbar
+			items={[
+				{ target: "/", title: "Home" },
+				{ target: "/blog", title: "Blog" },
+				{ target: "/about", title: "About" }
+			]}
+		/>
+
+		<select id="theme-selector">
+			<!-- <option value="">Select a Theme</option> -->
+			{themeOptions.map(theme => (
+				<option value={theme}>{theme}</option>
+			))}
+		</select>
+
 	</nav>
 </header>

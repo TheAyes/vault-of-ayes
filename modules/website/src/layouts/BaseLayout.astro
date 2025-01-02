@@ -1,0 +1,32 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+
+import "../styles/global.scss";
+import.meta.glob("/src/themes/*", { eager: false });
+---
+<html lang="en">
+
+<head>
+	<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	<script>
+		import { allTasks } from "nanostores";
+		import { themeStore } from "../store";
+
+		const updateThemeClass: Parameters<typeof themeStore.subscribe>[0] = (newValue: string, oldValue: string | undefined): void => {
+			if (!oldValue) {
+				document.documentElement.classList.add(newValue);
+			} else {
+				document.documentElement.classList.replace(oldValue, newValue);
+			}
+		};
+
+		themeStore.subscribe(updateThemeClass);
+		await allTasks();
+	</script>
+</head>
+<body>
+<slot />
+</body>
+
+</html>
